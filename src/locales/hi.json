@@ -1,0 +1,183 @@
+{
+  "welcome": "FarmLog में आपका स्वागत है",
+  "app_title": "FarmLog लाभ ट्रैकर",
+  "app_subtitle": "अपने खेत के लाभ और हानि को ट्रैक करें",
+  "ananth_farms": "अनंथ फार्म्स",
+  
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "farm_summary": "फार्म सारांश",
+    "total_crops": "कुल फसलें",
+    "net_profit_loss": "शुद्ध लाभ/हानि",
+    "your_crops": "आपकी फसलें",
+    "no_crops_added": "अभी तक कोई फसल नहीं जोड़ी गई",
+    "no_crops_description": "आय और व्यय को ट्रैक करने के लिए अपनी पहली फसल जोड़कर शुरू करें",
+    "add_first_crop": "अपनी पहली फसल जोड़ें",
+    "overall_profit": "कुल लाभ",
+    "total_income": "कुल आय",
+    "total_expenses": "कुल व्यय",
+    "land_expenses": "भूमि व्यय"
+  },
+  
+  "actions": {
+    "add_new_crop": "नई फसल जोड़ें",
+    "add_expense": "व्यय जोड़ें",
+    "add_income": "आय जोड़ें",
+    "add_land_expense": "भूमि व्यय जोड़ें",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "save": "सेव",
+    "cancel": "रद्द करें",
+    "close": "बंद करें",
+    "logout": "लॉगआउट",
+    "install_app": "ऐप इंस्टॉल करें",
+    "profile": "प्रोफाइल"
+  },
+  
+  "crop": {
+    "name": "फसल का नाम",
+    "type": "फसल का प्रकार",
+    "land_area": "भूमि क्षेत्र",
+    "sowing_date": "बुआई की तारीख",
+    "income": "आय",
+    "expenses": "व्यय",
+    "profit": "लाभ",
+    "loss": "हानि",
+    "sown": "बोया गया",
+    "details": "फसल विवरण",
+    "no_expenses": "कोई व्यय दर्ज नहीं किया गया",
+    "no_income": "कोई आय दर्ज नहीं की गई"
+  },
+  
+  "expense": {
+    "title": "व्यय",
+    "amount": "राशि",
+    "description": "विवरण",
+    "date": "तारीख",
+    "category": "श्रेणी",
+    "bill_image": "बिल की छवि",
+    "add_expense": "व्यय जोड़ें",
+    "edit_expense": "व्यय संपादित करें",
+    "expense_added": "व्यय सफलतापूर्वक जोड़ा गया",
+    "expense_updated": "व्यय सफलतापूर्वक अपडेट किया गया",
+    "expense_deleted": "व्यय सफलतापूर्वक हटाया गया"
+  },
+  
+  "income": {
+    "title": "आय",
+    "amount": "राशि",
+    "description": "विवरण",
+    "date": "तारीख",
+    "crop": "फसल",
+    "bill_image": "बिल की छवि",
+    "add_income": "आय जोड़ें",
+    "edit_income": "आय संपादित करें",
+    "income_added": "आय सफलतापूर्वक जोड़ी गई",
+    "income_updated": "आय सफलतापूर्वक अपडेट की गई",
+    "income_deleted": "आय सफलतापूर्वक हटाई गई"
+  },
+  
+  "land_expense": {
+    "title": "भूमि व्यय",
+    "amount": "राशि",
+    "description": "विवरण",
+    "date": "तारीख",
+    "category": "श्रेणी",
+    "bill_image": "बिल की छवि",
+    "add_land_expense": "भूमि व्यय जोड़ें",
+    "edit_land_expense": "भूमि व्यय संपादित करें",
+    "land_expense_added": "भूमि व्यय सफलतापूर्वक जोड़ा गया",
+    "land_expense_updated": "भूमि व्यय सफलतापूर्वक अपडेट किया गया",
+    "land_expense_deleted": "भूमि व्यय सफलतापूर्वक हटाया गया"
+  },
+  
+  "categories": {
+    "seeds": "बीज",
+    "sowing_labor": "बुआई का श्रम",
+    "weeding_labor": "निराई का श्रम",
+    "harvesting_labor": "कटाई का श्रम",
+    "cotton_picking_labor": "कपास तोड़ने का श्रम",
+    "fertilizer": "उर्वरक",
+    "fertilizer_application_labor": "उर्वरक डालने का श्रम",
+    "pesticide": "कीटनाशक",
+    "pesticide_spraying_labor": "कीटनाशक छिड़कने का श्रम",
+    "irrigation": "सिंचाई",
+    "equipment_rent": "उपकरण किराया",
+    "transportation": "परिवहन",
+    "other": "अन्य"
+  },
+  
+  "units": {
+    "acres": "एकड़",
+    "hectares": "हेक्टेयर"
+  },
+  
+  "settings": {
+    "title": "सेटिंग्स",
+    "language": "भाषा",
+    "currency": "मुद्रा",
+    "theme": "थीम",
+    "notifications": "सूचनाएं",
+    "data_management": "डेटा प्रबंधन",
+    "about": "के बारे में",
+    "version": "संस्करण",
+    "profile": "प्रोफाइल",
+    "security": "सुरक्षा",
+    "export_data": "डेटा निर्यात करें",
+    "import_data": "डेटा आयात करें",
+    "delete_account": "खाता हटाएं"
+  },
+  
+  "languages": {
+    "english": "अंग्रेजी",
+    "telugu": "तेलुगु",
+    "tamil": "तमिल",
+    "hindi": "हिंदी"
+  },
+  
+  "themes": {
+    "light": "हल्का",
+    "dark": "गहरा",
+    "auto": "स्वचालित"
+  },
+  
+  "ai": {
+    "smart_tips": "AI स्मार्ट टिप्स",
+    "chatbot": "AI चैटबॉट",
+    "suggest_category": "श्रेणी सुझाएं",
+    "recommendations": "स्मार्ट सिफारिशें",
+    "no_tips": "अभी कोई टिप्स उपलब्ध नहीं हैं",
+    "keep_using": "व्यक्तिगत AI सिफारिशों के लिए ऐप का उपयोग जारी रखें!"
+  },
+  
+  "auth": {
+    "sign_in": "साइन इन",
+    "sign_up": "साइन अप",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirm_password": "पासवर्ड की पुष्टि करें",
+    "forgot_password": "पासवर्ड भूल गए?",
+    "sign_out": "साइन आउट",
+    "get_started": "शुरू करें"
+  },
+  
+  "messages": {
+    "loading": "लोड हो रहा है...",
+    "error": "एक त्रुटि हुई",
+    "success": "सफलता",
+    "confirm_delete": "क्या आप वाकई इसे हटाना चाहते हैं?",
+    "data_exported": "डेटा सफलतापूर्वक निर्यात किया गया",
+    "data_imported": "डेटा सफलतापूर्वक आयात किया गया",
+    "password_changed": "पासवर्ड सफलतापूर्वक बदला गया",
+    "profile_updated": "प्रोफ़ाइल सफलतापूर्वक अपडेट किया गया",
+    "install_app_instruction": "बेहतर अनुभव के लिए अपने ब्राउज़र के इंस्टॉल विकल्प का उपयोग करें या होम स्क्रीन में जोड़ें!"
+  },
+  
+  "validation": {
+    "required": "यह फील्ड आवश्यक है",
+    "invalid_email": "अमान्य ईमेल पता",
+    "password_mismatch": "पासवर्ड मेल नहीं खाते",
+    "min_length": "न्यूनतम {{min}} अक्षर आवश्यक हैं",
+    "max_length": "अधिकतम {{max}} अक्षर अनुमत हैं"
+  }
+} 

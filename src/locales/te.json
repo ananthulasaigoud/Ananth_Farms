@@ -1,0 +1,183 @@
+{
+  "welcome": "FarmLog కి స్వాగతం",
+  "app_title": "FarmLog లాభ ట్రాకర్",
+  "app_subtitle": "మీ వ్యవసాయ లాభ నష్టాలను ట్రాక్ చేయండి",
+  "ananth_farms": "అనంత్ ఫార్మ్స్",
+  
+  "dashboard": {
+    "title": "డాష్‌బోర్డ్",
+    "farm_summary": "వ్యవసాయ సారాంశం",
+    "total_crops": "మొత్తం పంటలు",
+    "net_profit_loss": "నికర లాభం/నష్టం",
+    "your_crops": "మీ పంటలు",
+    "no_crops_added": "ఇంకా పంటలు జోడించబడలేదు",
+    "no_crops_description": "ఆదాయం మరియు ఖర్చులను ట్రాక్ చేయడానికి మీ మొదటి పంటను జోడించడం ప్రారంభించండి",
+    "add_first_crop": "మీ మొదటి పంటను జోడించండి",
+    "overall_profit": "మొత్తం లాభం",
+    "total_income": "మొత్తం ఆదాయం",
+    "total_expenses": "మొత్తం ఖర్చులు",
+    "land_expenses": "భూమి ఖర్చులు"
+  },
+  
+  "actions": {
+    "add_new_crop": "కొత్త పంట జోడించండి",
+    "add_expense": "ఖర్చు జోడించండి",
+    "add_income": "ఆదాయం జోడించండి",
+    "add_land_expense": "భూమి ఖర్చు జోడించండి",
+    "edit": "సవరించు",
+    "delete": "తొలగించు",
+    "save": "సేవ్",
+    "cancel": "రద్దు",
+    "close": "మూసివేయి",
+    "logout": "లాగ్అవుట్",
+    "install_app": "యాప్ ఇన్‌స్టాల్ చేయండి",
+    "profile": "ప్రొఫైల్"
+  },
+  
+  "crop": {
+    "name": "పంట పేరు",
+    "type": "పంట రకం",
+    "land_area": "భూమి వైశాల్యం",
+    "sowing_date": "విత్తన తేదీ",
+    "income": "ఆదాయం",
+    "expenses": "ఖర్చులు",
+    "profit": "లాభం",
+    "loss": "నష్టం",
+    "sown": "విత్తబడింది",
+    "details": "పంట వివరాలు",
+    "no_expenses": "ఖర్చులు రికార్డ్ చేయబడలేదు",
+    "no_income": "ఆదాయం రికార్డ్ చేయబడలేదు"
+  },
+  
+  "expense": {
+    "title": "ఖర్చు",
+    "amount": "మొత్తం",
+    "description": "వివరణ",
+    "date": "తేదీ",
+    "category": "వర్గం",
+    "bill_image": "బిల్లు చిత్రం",
+    "add_expense": "ఖర్చు జోడించండి",
+    "edit_expense": "ఖర్చును సవరించండి",
+    "expense_added": "ఖర్చు విజయవంతంగా జోడించబడింది",
+    "expense_updated": "ఖర్చు విజయవంతంగా నవీకరించబడింది",
+    "expense_deleted": "ఖర్చు విజయవంతంగా తొలగించబడింది"
+  },
+  
+  "income": {
+    "title": "ఆదాయం",
+    "amount": "మొత్తం",
+    "description": "వివరణ",
+    "date": "తేదీ",
+    "crop": "పంట",
+    "bill_image": "బిల్లు చిత్రం",
+    "add_income": "ఆదాయం జోడించండి",
+    "edit_income": "ఆదాయాన్ని సవరించండి",
+    "income_added": "ఆదాయం విజయవంతంగా జోడించబడింది",
+    "income_updated": "ఆదాయం విజయవంతంగా నవీకరించబడింది",
+    "income_deleted": "ఆదాయం విజయవంతంగా తొలగించబడింది"
+  },
+  
+  "land_expense": {
+    "title": "భూమి ఖర్చు",
+    "amount": "మొత్తం",
+    "description": "వివరణ",
+    "date": "తేదీ",
+    "category": "వర్గం",
+    "bill_image": "బిల్లు చిత్రం",
+    "add_land_expense": "భూమి ఖర్చు జోడించండి",
+    "edit_land_expense": "భూమి ఖర్చును సవరించండి",
+    "land_expense_added": "భూమి ఖర్చు విజయవంతంగా జోడించబడింది",
+    "land_expense_updated": "భూమి ఖర్చు విజయవంతంగా నవీకరించబడింది",
+    "land_expense_deleted": "భూమి ఖర్చు విజయవంతంగా తొలగించబడింది"
+  },
+  
+  "categories": {
+    "seeds": "విత్తనాలు",
+    "sowing_labor": "విత్తన కూలీ",
+    "weeding_labor": "కలుపు తీయడం కూలీ",
+    "harvesting_labor": "పంట కోత కూలీ",
+    "cotton_picking_labor": "పత్తి కోత కూలీ",
+    "fertilizer": "ఎరువులు",
+    "fertilizer_application_labor": "ఎరువు వేయడం కూలీ",
+    "pesticide": "కీటక నాశని",
+    "pesticide_spraying_labor": "కీటక నాశని చల్లడం కూలీ",
+    "irrigation": "నీటి సరఫరా",
+    "equipment_rent": "పరికరాల అద్దె",
+    "transportation": "రవాణా",
+    "other": "ఇతర"
+  },
+  
+  "units": {
+    "acres": "ఎకరాలు",
+    "hectares": "హెక్టార్లు"
+  },
+  
+  "settings": {
+    "title": "సెట్టింగులు",
+    "language": "భాష",
+    "currency": "కరెన్సీ",
+    "theme": "థీమ్",
+    "notifications": "నోటిఫికేషన్లు",
+    "data_management": "డేటా నిర్వహణ",
+    "about": "గురించి",
+    "version": "వెర్షన్",
+    "profile": "ప్రొఫైల్",
+    "security": "భద్రత",
+    "export_data": "డేటా ఎగుమతి",
+    "import_data": "డేటా దిగుమతి",
+    "delete_account": "ఖాతాను తొలగించండి"
+  },
+  
+  "languages": {
+    "english": "ఆంగ్లం",
+    "telugu": "తెలుగు",
+    "tamil": "తమిళం",
+    "hindi": "హిందీ"
+  },
+  
+  "themes": {
+    "light": "వెలుగు",
+    "dark": "చీకటి",
+    "auto": "ఆటో"
+  },
+  
+  "ai": {
+    "smart_tips": "AI స్మార్ట్ చిట్కాలు",
+    "chatbot": "AI చాట్‌బాట్",
+    "suggest_category": "వర్గాన్ని సూచించండి",
+    "recommendations": "స్మార్ట్ సిఫార్సులు",
+    "no_tips": "ప్రస్తుతం చిట్కాలు లేవు",
+    "keep_using": "వ్యక్తిగతీకరించిన AI సిఫార్సుల కోసం యాప్‌ని ఉపయోగించడం కొనసాగించండి!"
+  },
+  
+  "auth": {
+    "sign_in": "సైన్ ఇన్",
+    "sign_up": "సైన్ అప్",
+    "email": "ఇమెయిల్",
+    "password": "పాస్‌వర్డ్",
+    "confirm_password": "పాస్‌వర్డ్ నిర్ధారించండి",
+    "forgot_password": "పాస్‌వర్డ్ మరచిపోయారా?",
+    "sign_out": "సైన్ అవుట్",
+    "get_started": "ప్రారంభించండి"
+  },
+  
+  "messages": {
+    "loading": "లోడ్ అవుతోంది...",
+    "error": "ఒక లోపం సంభవించింది",
+    "success": "విజయం",
+    "confirm_delete": "దీన్ని తొలగించాలని మీరు ఖచ్చితంగా ఉన్నారా?",
+    "data_exported": "డేటా విజయవంతంగా ఎగుమతి చేయబడింది",
+    "data_imported": "డేటా విజయవంతంగా దిగుమతి చేయబడింది",
+    "password_changed": "పాస్‌వర్డ్ విజయవంతంగా మార్చబడింది",
+    "profile_updated": "ప్రొఫైల్ విజయవంతంగా నవీకరించబడింది",
+    "install_app_instruction": "మీ బ్రౌజర్ యొక్క ఇన్‌స్టాల్ ఎంపికను ఉపయోగించండి లేదా ఉత్తమ అనుభవం కోసం హోమ్ స్క్రీన్‌కి జోడించండి!"
+  },
+  
+  "validation": {
+    "required": "ఈ ఫీల్డ్ అవసరం",
+    "invalid_email": "చెల్లని ఇమెయిల్ చిరునామా",
+    "password_mismatch": "పాస్‌వర్డ్లు సరిపోలడం లేదు",
+    "min_length": "కనీసం {{min}} అక్షరాలు అవసరం",
+    "max_length": "గరిష్టం {{max}} అక్షరాలు అనుమతించబడతాయి"
+  }
+} 
