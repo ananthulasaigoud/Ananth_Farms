@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import EditLandExpenseModal from './EditLandExpenseModal';
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { PaymentStatusBadge } from "@/components/ui/payment-status-badge";
 
 const LandExpensesView = () => {
   const { landExpenses, deleteLandExpense } = useCropStore();
@@ -67,6 +68,15 @@ const LandExpensesView = () => {
                 {expense.description && (
                   <p className="text-xs text-gray-500 truncate mt-1">{expense.description}</p>
                 )}
+                {/* Payment Status Badge */}
+                <div className="mt-2">
+                  <PaymentStatusBadge 
+                    status={expense.paymentStatus}
+                    amount={expense.amount}
+                    paidAmount={expense.paidAmount}
+                    className="text-xs"
+                  />
+                </div>
               </div>
               <div className="flex flex-col gap-2 sm:flex-row sm:gap-1 items-center ml-2">
                 <Button variant="ghost" size="sm" className="w-10 h-10" aria-label={t('actions.edit')} onClick={() => setEditExpense(expense)}>

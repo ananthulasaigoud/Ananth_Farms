@@ -14,6 +14,7 @@ import EditCropModal from "./EditCropModal";
 import EditExpenseModal from "./EditExpenseModal";
 import EditIncomeModal from "./EditIncomeModal";
 import { useTranslation } from "react-i18next";
+import { PaymentStatusBadge } from "@/components/ui/payment-status-badge";
 
 interface CropDetailModalProps {
   crop: Crop;

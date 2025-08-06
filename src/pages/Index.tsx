@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, TrendingUp, TrendingDown, PieChart, Settings, LogOut, Bell, Sparkles, AlertTriangle, Download } from "lucide-react";
+import { Plus, TrendingUp, TrendingDown, PieChart, Settings, LogOut, Bell, Sparkles, AlertTriangle, Download, DollarSign } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -245,6 +245,15 @@ const Index = () => {
           >
             <span className="text-lg mr-2">👤</span>
             <span className="sr-only sm:not-sr-only">{t('actions.profile')}</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/payments')}
+            className="shrink-0"
+          >
+            <DollarSign className="w-4 h-4 mr-1" />
+            <span className="hidden sm:inline">{t('actions.payments')}</span>
           </Button>
         </div>
       </header>

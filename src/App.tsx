@@ -10,6 +10,7 @@ import CropDetail from "./pages/CropDetail";
 import LandExpenses from "./pages/LandExpenses";
 import AddCrop from "./pages/AddCrop";
 import Profile from "./pages/Profile";
+import Payments from "./pages/Payments";
 import NotFound from "./pages/NotFound";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 import FloatingAIChatbot from './components/FloatingAIChatbot';
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/land-expenses" element={<LandExpenses />} />
             <Route path="/add-crop" element={<AddCrop />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/payments" element={<Payments />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

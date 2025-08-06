@@ -34,6 +34,7 @@
     "update_crop": "Update Crop",
     "update_expense": "Update Expense",
     "update_income": "Update Income",
+    "update_land_expense": "Update Land Expense",
     "save": "Save",
     "save_changes": "Save Changes",
     "add_crop": "Add Crop",
@@ -44,7 +45,8 @@
     "saving": "Saving...",
     "logout": "Logout",
     "install_app": "Install App",
-    "profile": "Profile"
+    "profile": "Profile",
+    "payments": "Payments"
   },
   
   "crop": {
@@ -104,109 +106,125 @@
     "land_expense_deleted": "Land expense deleted successfully"
   },
   
-  "categories": {
-    "seeds": "Seeds",
-    "sowing_labor": "Sowing Labor",
-    "weeding_labor": "Weeding Labor",
-    "harvesting_labor": "Harvesting Labor",
-    "cotton_picking_labor": "Cotton Picking Labor",
-    "fertilizer": "Fertilizer",
-    "fertilizer_application_labor": "Fertilizer Application Labor",
-    "pesticide": "Pesticide",
-    "pesticide_spraying_labor": "Pesticide Spraying Labor",
-    "irrigation": "Irrigation",
-    "equipment_rent": "Equipment Rent",
-    "transportation": "Transportation",
-    "other": "Other"
+  "payment": {
+    "title": "Payment Management",
+    "status": "Payment Status",
+    "paid_amount": "Paid Amount",
+    "payment_date": "Payment Date",
+    "payment_method": "Payment Method",
+    "payment_notes": "Payment Notes",
+    "unpaid": "Unpaid",
+    "partial": "Partial",
+    "paid": "Paid",
+    "unknown": "Unknown",
+    "update_payment": "Update Payment",
+    "current_status": "Current Status",
+    "select_status": "Select Status",
+    "enter_paid_amount": "Please enter paid amount",
+    "remaining": "Remaining",
+    "select_method": "Select Method",
+    "notes_placeholder": "Add payment notes...",
+    "updated_successfully": "Payment updated successfully",
+    "total_amount": "Total Amount",
+    "total_paid": "Total Paid",
+    "total_unpaid": "Total Unpaid",
+    "transactions": "transactions",
+    "pending": "pending",
+    "status_breakdown": "Payment Status Breakdown",
+    "items": "items",
+    "overdue_payments": "Overdue Payments",
+    "overdue_description": "You have {{count}} overdue payments that are more than 30 days old",
+    "more_overdue": "more overdue",
+    "recent_unpaid": "Recent Unpaid Expenses",
+    "update": "Update",
+    "methods": {
+      "cash": "Cash",
+      "bank_transfer": "Bank Transfer",
+      "upi": "UPI",
+      "cheque": "Cheque",
+      "credit": "Credit",
+      "other": "Other"
+    }
   },
   
-  "units": {
-    "acres": "Acres",
-    "hectares": "Hectares"
+  "messages": {
+    "success": "Success",
+    "error": "Error",
+    "loading": "Loading...",
+    "no_data": "No data available",
+    "try_again": "Please try again",
+    "connection_error": "Connection error",
+    "unauthorized": "Unauthorized access"
   },
   
   "settings": {
     "title": "Settings",
-    "language": "Language",
-    "currency": "Currency",
     "theme": "Theme",
+    "language": "Language",
     "notifications": "Notifications",
-    "data_management": "Data Management",
+    "privacy": "Privacy",
     "about": "About",
-    "version": "Version",
-    "profile": "Profile",
-    "security": "Security",
-    "export_data": "Export Data",
-    "import_data": "Import Data",
-    "delete_account": "Delete Account"
+    "help": "Help",
+    "feedback": "Feedback"
   },
   
-  "languages": {
-    "english": "English",
-    "telugu": "Telugu",
-    "tamil": "Tamil",
-    "hindi": "Hindi"
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "save_profile": "Save Profile",
+    "profile_updated": "Profile updated successfully"
   },
   
-  "themes": {
-    "light": "Light",
-    "dark": "Dark",
-    "auto": "Auto"
+  "filters": {
+    "title": "Filters",
+    "all": "All",
+    "this_month": "This Month",
+    "last_month": "Last Month",
+    "this_year": "This Year",
+    "custom_range": "Custom Range",
+    "apply": "Apply",
+    "clear": "Clear"
+  },
+  
+  "reports": {
+    "title": "Reports",
+    "profit_loss": "Profit & Loss",
+    "expense_summary": "Expense Summary",
+    "income_summary": "Income Summary",
+    "crop_performance": "Crop Performance",
+    "export": "Export",
+    "print": "Print",
+    "share": "Share"
   },
   
   "ai": {
-    "smart_tips": "AI Smart Tips",
-    "chatbot": "AI Chatbot",
-    "suggest_category": "Suggest Category",
-    "recommendations": "Smart Recommendations",
-    "no_tips": "No tips available right now",
-    "keep_using": "Keep using the app to get personalized AI recommendations!"
+    "title": "AI Assistant",
+    "ask_question": "Ask a question about your farm...",
+    "suggestions": "Suggestions",
+    "analyzing": "Analyzing your data...",
+    "smart_tips": "Smart Tips",
+    "recommendations": "Recommendations"
   },
   
-  "auth": {
-    "sign_in": "Sign In",
-    "sign_up": "Sign Up",
-    "email": "Email",
-    "password": "Password",
-    "confirm_password": "Confirm Password",
-    "forgot_password": "Forgot Password?",
-    "sign_out": "Sign Out",
-    "get_started": "Get Started"
+  "pwa": {
+    "install_title": "Install FarmLog",
+    "install_description": "Add FarmLog to your home screen for quick access",
+    "install_button": "Install",
+    "installed": "App installed successfully",
+    "update_available": "Update available",
+    "update_button": "Update"
   },
   
-  "messages": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "success": "Success",
-    "confirm_delete": "Are you sure you want to delete this?",
-    "data_exported": "Data exported successfully",
-    "data_imported": "Data imported successfully",
-    "password_changed": "Password changed successfully",
-    "profile_updated": "Profile updated successfully",
-    "install_app_instruction": "Use your browser's install option or add to home screen for the best experience!",
-    "delete_crop_confirmation": "Are you sure you want to delete this crop? This will also delete all associated income and expense records. This action cannot be undone.",
-    "delete_expense_confirmation": "Are you sure you want to delete this expense record? This action cannot be undone.",
-    "delete_income_confirmation": "Are you sure you want to delete this income record? This action cannot be undone.",
-    "delete_land_expense_confirmation": "Are you sure you want to delete this land expense record? This action cannot be undone.",
-    "no_expense_records": "No expense records yet",
-    "no_income_records": "No income records yet"
-  },
-  
-  "validation": {
-    "required": "This field is required",
-    "invalid_email": "Invalid email address",
-    "password_mismatch": "Passwords do not match",
-    "min_length": "Minimum {{min}} characters required",
-    "max_length": "Maximum {{max}} characters allowed"
-  },
-  
-  "cards": {
-    "expense_records": "Expense Records",
-    "income_records": "Income Records"
-  },
-  
-  "tabs": {
-    "expenses": "Expenses",
-    "income": "Income"
+  "notifications": {
+    "title": "Notifications",
+    "new_expense": "New expense added",
+    "new_income": "New income recorded",
+    "payment_reminder": "Payment reminder",
+    "overdue_payment": "Overdue payment detected",
+    "profit_alert": "Profit milestone reached",
+    "clear_all": "Clear all"
   }
 } 

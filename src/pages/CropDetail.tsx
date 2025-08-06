@@ -36,6 +36,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog';
 import { getExpenseCategoryIcon } from '@/utils/cropExpenseCategories';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend, CartesianGrid } from 'recharts';
+import { PaymentStatusBadge } from "@/components/ui/payment-status-badge";
 
 const CropDetail = () => {
   const { cropId } = useParams<{ cropId: string }>();
@@ -453,6 +454,15 @@ const CropDetail = () => {
                               {expense.description && (
                                 <p className="text-xs text-gray-500 truncate mt-1">{expense.description}</p>
                               )}
+                              {/* Payment Status Badge */}
+                              <div className="mt-2">
+                                <PaymentStatusBadge 
+                                  status={expense.paymentStatus}
+                                  amount={expense.amount}
+                                  paidAmount={expense.paidAmount}
+                                  className="text-xs"
+                                />
+                              </div>
                               {expense.bill_image_url && expense.bill_image_url.length > 0 && (
                                 <MultiBillImages imageUrls={expense.bill_image_url} />
                               )}
