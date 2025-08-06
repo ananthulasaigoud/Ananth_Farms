@@ -56,6 +56,11 @@ export type Database = {
           id: string
           bill_image_url: string[] | null
           order: number | null
+          payment_status: string | null
+          paid_amount: number | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_notes: string | null
         }
         Insert: {
           amount: number
@@ -67,6 +72,11 @@ export type Database = {
           id?: string
           bill_image_url?: string[] | null
           order?: number | null
+          payment_status?: string | null
+          paid_amount?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_notes?: string | null
         }
         Update: {
           amount?: number
@@ -78,6 +88,11 @@ export type Database = {
           id?: string
           bill_image_url?: string[] | null
           order?: number | null
+          payment_status?: string | null
+          paid_amount?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_notes?: string | null
         }
         Relationships: [
           {
@@ -100,6 +115,11 @@ export type Database = {
           source: string
           bill_image_url: string[] | null
           order: number | null
+          payment_status: string | null
+          paid_amount: number | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_notes: string | null
         }
         Insert: {
           amount: number
@@ -111,6 +131,11 @@ export type Database = {
           source: string
           bill_image_url?: string[] | null
           order?: number | null
+          payment_status?: string | null
+          paid_amount?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_notes?: string | null
         }
         Update: {
           amount?: number
@@ -122,6 +147,11 @@ export type Database = {
           source?: string
           bill_image_url?: string[] | null
           order?: number | null
+          payment_status?: string | null
+          paid_amount?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_notes?: string | null
         }
         Relationships: [
           {
@@ -143,6 +173,12 @@ export type Database = {
           id: string
           user_id: string
           bill_image_url: string[] | null
+          order: number | null
+          payment_status: string | null
+          paid_amount: number | null
+          payment_date: string | null
+          payment_method: string | null
+          payment_notes: string | null
         }
         Insert: {
           amount: number
@@ -153,6 +189,12 @@ export type Database = {
           id?: string
           user_id: string
           bill_image_url?: string[] | null
+          order?: number | null
+          payment_status?: string | null
+          paid_amount?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_notes?: string | null
         }
         Update: {
           amount?: number
@@ -163,6 +205,12 @@ export type Database = {
           id?: string
           user_id?: string
           bill_image_url?: string[] | null
+          order?: number | null
+          payment_status?: string | null
+          paid_amount?: number | null
+          payment_date?: string | null
+          payment_method?: string | null
+          payment_notes?: string | null
         }
         Relationships: []
       }

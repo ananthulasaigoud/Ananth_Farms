@@ -45,6 +45,18 @@ export const CROP_TYPE_LIST: CropType[] = [
   'Other',
 ];
 
+// Payment Status Types
+export type PaymentStatus = 'unpaid' | 'partial' | 'paid';
+export type PaymentMethod = 'cash' | 'bank_transfer' | 'upi' | 'cheque' | 'credit' | 'other';
+
+export interface PaymentInfo {
+  status: PaymentStatus;
+  paidAmount: number;
+  paymentDate?: string;
+  paymentMethod?: PaymentMethod;
+  paymentNotes?: string;
+}
+
 export interface Expense {
   id: string;
   cropId: string;
@@ -54,6 +66,12 @@ export interface Expense {
   description?: string;
   bill_image_url?: string[];
   order?: number;
+  // Payment fields
+  paymentStatus: PaymentStatus;
+  paidAmount: number;
+  paymentDate?: string;
+  paymentMethod?: PaymentMethod;
+  paymentNotes?: string;
 }
 
 export type ExpenseCategory = 
@@ -73,6 +91,8 @@ export type ExpenseCategory =
   | 'Plough'
   | 'Acchulu'
   | 'Guntuka'
+  | 'Patti Katte'
+  | 'Tractor Guntuku'
   | 'Other';
 
 export interface Income {
@@ -84,6 +104,12 @@ export interface Income {
   description?: string;
   bill_image_url?: string[];
   order?: number;
+  // Payment fields
+  paymentStatus: PaymentStatus;
+  paidAmount: number;
+  paymentDate?: string;
+  paymentMethod?: PaymentMethod;
+  paymentNotes?: string;
 }
 
 export interface LandExpense {
@@ -95,6 +121,12 @@ export interface LandExpense {
   createdAt: string;
   bill_image_url?: string[];
   order?: number;
+  // Payment fields
+  paymentStatus: PaymentStatus;
+  paidAmount: number;
+  paymentDate?: string;
+  paymentMethod?: PaymentMethod;
+  paymentNotes?: string;
 }
 
 export type LandExpenseCategory = 

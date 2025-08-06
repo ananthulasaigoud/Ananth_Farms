@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Crop, Expense, Income, LandExpense } from "@/types/crop";
 import { toast } from "sonner";
+import { PaymentStatusBadge } from "@/components/ui/payment-status-badge";
 
 const LandExpenses = () => {
   const navigate = useNavigate();
@@ -255,6 +256,15 @@ const LandExpenses = () => {
                               {expense.description}
                             </p>
                           )}
+                          {/* Payment Status Badge */}
+                          <div className="mt-2 mb-2">
+                            <PaymentStatusBadge 
+                              status={expense.paymentStatus}
+                              amount={expense.amount}
+                              paidAmount={expense.paidAmount}
+                              className="text-xs"
+                            />
+                          </div>
                           {expense.bill_image_url && expense.bill_image_url.length > 0 && (
                             <div className="mt-2">
                               <MultiBillImages imageUrls={expense.bill_image_url} />
@@ -276,7 +286,6 @@ const LandExpenses = () => {
                               className="h-8 w-8 sm:h-9 sm:w-9 p-0"
                             >
                               <Edit className="w-3 h-3 sm:w-4 sm:h-4" />
-                              {t('actions.edit')}
                             </Button>
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
@@ -286,7 +295,6 @@ const LandExpenses = () => {
                                   className="h-8 w-8 sm:h-9 sm:w-9 p-0 text-red-600 hover:text-red-700 hover:bg-red-50"
                                 >
                                   <Trash2 className="w-3 h-3 sm:w-4 sm:h-4" />
-                                  {t('actions.delete')}
                                 </Button>
                               </AlertDialogTrigger>
                               <AlertDialogContent>

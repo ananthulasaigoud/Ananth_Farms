@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { MultiImageUpload } from "@/components/ui/multi-image-upload";
 import { useCropStore } from "@/store/supabaseCropStore";
 import { useAuth } from "@/hooks/useAuth";
-import { ExpenseCategory } from "@/types/crop";
+import { ExpenseCategory, PaymentStatus, PaymentMethod } from "@/types/crop";
 import { getCropSpecificExpenseCategories, getExpenseCategoryIcon } from "@/utils/cropExpenseCategories";
 import { uploadMultipleBillImages } from "@/utils/imageUpload";
 import { toast } from "sonner";
@@ -36,6 +36,13 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [ocrLoading, setOcrLoading] = useState(false);
   
+  // Payment fields
+  const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('unpaid');
+  const [paidAmount, setPaidAmount] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | ''>('');
+  const [paymentNotes, setPaymentNotes] = useState("");
+  
   const { crops, addExpense, refreshCropData } = useCropStore();
   const { user } = useAuth();
 
@@ -60,6 +67,8 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
     'Plough',
     'Acchulu',
     'Guntuka',
+    'Patti Katte',
+    'Tractor Guntuku',
     'Other',
   ];
 
@@ -110,11 +119,17 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
 
       await addExpense({
         cropId: cropId || null,
-        category: category as any,
+        category: category as ExpenseCategory,
         amount: parseFloat(amount),
         date,
         description: description.trim() || undefined,
         bill_image_url: uploadedImageUrls.length > 0 ? uploadedImageUrls : undefined,
+        // Payment fields
+        paymentStatus,
+        paidAmount: parseFloat(paidAmount) || 0,
+        paymentDate: paymentDate || undefined,
+        paymentMethod: paymentMethod || undefined,
+        paymentNotes: paymentNotes.trim() || undefined,
       });
 
       // Refresh the data to ensure real-time updates
@@ -132,6 +147,12 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
       setCustomCategory("");
       setSelectedFiles([]);
       setImageUrls([]);
+      // Reset payment fields
+      setPaymentStatus('unpaid');
+      setPaidAmount("");
+      setPaymentDate("");
+      setPaymentMethod('');
+      setPaymentNotes("");
       onOpenChange(false);
     } catch (error) {
       toast.error("Failed to add expense. Please try again.");
@@ -198,134 +219,193 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
           )}
 
           {/* Category Field - always visible, combobox style */}
-            <div className="space-y-1.5">
-              <Label htmlFor="category" className="text-sm font-medium">Category *</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="category" className="text-sm font-medium">Category *</Label>
             <div className="flex gap-2">
-              <Select value={category} onValueChange={(value: string) => { setCategory(value); setCustomCategory(""); }}>
-                <SelectTrigger className="h-9 sm:h-10 w-40">
-                  <SelectValue placeholder="Choose category" />
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger className="flex-1 h-9 sm:h-10">
+                  <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
                   {allCategories.map((cat) => (
                     <SelectItem key={cat} value={cat}>
-                      {getExpenseCategoryIcon(cat as ExpenseCategory)} {cat}
+                      <div className="flex items-center gap-2">
+                        <span>{getExpenseCategoryIcon(cat as ExpenseCategory)}</span>
+                        <span>{cat}</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <Input
-                id="customCategory"
-                value={customCategory}
-                onChange={e => { setCustomCategory(e.target.value); setCategory(e.target.value); }}
-                placeholder="Or type custom"
-                className="h-9 sm:h-10 flex-1"
-              />
               <Button
                 type="button"
                 variant="outline"
                 size="sm"
+                className="px-2"
                 onClick={async () => {
-                  if (!description.trim()) {
-                    toast.error("Please enter a description first");
-                    return;
-                  }
-                  try {
+                  if (description.trim()) {
                     const suggestion = await suggestExpenseCategory(description);
-                    setCategory(suggestion);
-                    toast.success(`AI suggested: ${suggestion}`);
-                  } catch (error) {
-                    toast.error("Failed to get AI suggestion");
+                    if (suggestion) {
+                      setCategory(suggestion);
+                      toast.success(`AI suggested: ${suggestion}`);
+                    }
                   }
                 }}
-                className="shrink-0"
-                disabled={!description.trim()}
+                disabled={!description.trim() || ocrLoading}
               >
-                <Sparkles className="w-4 h-4 mr-1" />
-                AI Suggest
+                <Sparkles className="w-4 h-4" />
               </Button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="amount" className="text-sm font-medium">Amount (₹) *</Label>
-              <Input
-                id="amount"
-                type="number"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="0.00"
-                className="h-9 sm:h-10"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="date" className="text-sm font-medium">Date *</Label>
-              <Input
-                id="date"
-                type="date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="h-9 sm:h-10"
-              />
-            </div>
+          {/* Amount Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="amount" className="text-sm font-medium">Amount (₹) *</Label>
+            <Input
+              id="amount"
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.00"
+              min="0"
+              step="0.01"
+              className="h-9 sm:h-10"
+              required
+            />
           </div>
 
+          {/* Date Field */}
           <div className="space-y-1.5">
-            <Label htmlFor="description" className="text-sm font-medium">Description (Optional)</Label>
+            <Label htmlFor="date" className="text-sm font-medium">Date *</Label>
+            <Input
+              id="date"
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              max={new Date().toISOString().split('T')[0]}
+              className="h-9 sm:h-10"
+              required
+            />
+          </div>
+
+          {/* Description Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="description" className="text-sm font-medium">Description</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Additional notes..."
-              className="min-h-[60px] resize-none"
+              placeholder="Enter expense description..."
               rows={2}
+              className="resize-none"
             />
           </div>
 
-          {/* Multi-Image Upload */}
-          <MultiImageUpload
-            value={imageUrls}
-            onChange={setImageUrls}
-            onFileSelect={handleFileSelect}
-            disabled={loading || isUploadingImage}
-            maxImages={5}
-          />
+          {/* Payment Status Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="payment-status" className="text-sm font-medium">Payment Status</Label>
+            <Select value={paymentStatus} onValueChange={(value) => setPaymentStatus(value as PaymentStatus)}>
+              <SelectTrigger className="h-9 sm:h-10">
+                <SelectValue placeholder="Select payment status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="unpaid">❌ Unpaid</SelectItem>
+                <SelectItem value="partial">⚠️ Partial</SelectItem>
+                <SelectItem value="paid">✅ Paid</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={async () => {
-              if (imageUrls.length === 0) return;
-              setOcrLoading(true);
-              const result = await Tesseract.recognize(imageUrls[0], 'eng');
-              setOcrLoading(false);
-              const text = result.data.text;
-              // Try to extract amount (simple regex for numbers with decimals)
-              const amountMatch = text.match(/\d+[.,]?\d*/g);
-              if (amountMatch) setAmount(String(parseFloat(amountMatch[0].replace(',', ''))));
-              setDescription(text.trim());
-            }}
-            disabled={ocrLoading}
-          >
-            {ocrLoading ? 'Extracting...' : 'Extract from Bill Image'}
-          </Button>
+          {/* Paid Amount Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="paid-amount" className="text-sm font-medium">Paid Amount (₹)</Label>
+            <Input
+              id="paid-amount"
+              type="number"
+              value={paidAmount}
+              onChange={(e) => setPaidAmount(e.target.value)}
+              placeholder="0.00"
+              min="0"
+              max={amount ? parseFloat(amount) : undefined}
+              step="0.01"
+              className="h-9 sm:h-10"
+              disabled={paymentStatus === 'paid'}
+            />
+            {paymentStatus === 'paid' && amount && (
+              <p className="text-xs text-gray-500">Auto-filled with full amount</p>
+            )}
+          </div>
 
-          <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3 pt-3 sm:pt-4">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={() => onOpenChange(false)} 
-              className="flex-1 h-9 sm:h-10"
+          {/* Payment Date Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="payment-date" className="text-sm font-medium">Payment Date</Label>
+            <Input
+              id="payment-date"
+              type="date"
+              value={paymentDate}
+              onChange={(e) => setPaymentDate(e.target.value)}
+              max={new Date().toISOString().split('T')[0]}
+              className="h-9 sm:h-10"
+            />
+          </div>
+
+          {/* Payment Method Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="payment-method" className="text-sm font-medium">Payment Method</Label>
+            <Select value={paymentMethod} onValueChange={(value) => setPaymentMethod(value as PaymentMethod)}>
+              <SelectTrigger className="h-9 sm:h-10">
+                <SelectValue placeholder="Select payment method" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="cash">💵 Cash</SelectItem>
+                <SelectItem value="bank_transfer">🏦 Bank Transfer</SelectItem>
+                <SelectItem value="upi">📱 UPI</SelectItem>
+                <SelectItem value="cheque">📄 Cheque</SelectItem>
+                <SelectItem value="credit">💳 Credit</SelectItem>
+                <SelectItem value="other">📝 Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Payment Notes Field */}
+          <div className="space-y-1.5">
+            <Label htmlFor="payment-notes" className="text-sm font-medium">Payment Notes</Label>
+            <Textarea
+              id="payment-notes"
+              value={paymentNotes}
+              onChange={(e) => setPaymentNotes(e.target.value)}
+              placeholder="Add payment notes..."
+              rows={2}
+              className="resize-none"
+            />
+          </div>
+
+          {/* Bill Images */}
+          <div className="space-y-1.5">
+            <Label className="text-sm font-medium">Bill Images (Optional)</Label>
+            <MultiImageUpload
+              onFileSelect={handleFileSelect}
+              onChange={setImageUrls}
               disabled={loading || isUploadingImage}
+              maxImages={5}
+            />
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2 pt-2">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={loading}
+              className="flex-1"
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
-              className="flex-1 bg-red-600 hover:bg-red-700 h-9 sm:h-10" 
-              disabled={loading || isUploadingImage}
+            <Button
+              type="submit"
+              disabled={loading}
+              className="flex-1"
             >
               {loading ? "Adding..." : "Add Expense"}
             </Button>

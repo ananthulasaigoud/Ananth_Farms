@@ -12,6 +12,12 @@ export const getCropSpecificExpenseCategories = (cropType: CropType): ExpenseCat
     'Irrigation',
     'Equipment Rent',
     'Transportation',
+    'Dunnakam',
+    'Plough',
+    'Acchulu',
+    'Guntuka',
+    'Patti Katte',
+    'Tractor Guntuku',
     'Other'
   ];
 
@@ -92,6 +98,12 @@ export const getExpenseCategoryIcon = (category: ExpenseCategory): string => {
     'Irrigation': '💧',
     'Equipment Rent': '🚜',
     'Transportation': '🚛',
+    'Dunnakam': '🔨',
+    'Plough': '🚜',
+    'Acchulu': '⚙️',
+    'Guntuka': '🔧',
+    'Patti Katte': '🌾',
+    'Tractor Guntuku': '🚜',
     'Other': '📋',
   };
   return icons[category] || '📋';
@@ -131,5 +143,7 @@ export const ALL_EXPENSE_CATEGORIES = [
   'Plough',
   'Acchulu',
   'Guntuka',
+  'Patti Katte',
+  'Tractor Guntuku',
   'Other',
 ];
