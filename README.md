@@ -1,4 +1,4 @@
-# 🌾 FarmLog Profit Tracker
+# 🌾 Ananthula Profit Tracker
 
 A comprehensive Progressive Web App (PWA) for farmers to track crops, expenses, income, and analyze profits with AI-powered insights.
 
