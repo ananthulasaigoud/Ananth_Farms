@@ -45,6 +45,7 @@ const DynamicDashboard: React.FC<DynamicDashboardProps> = ({ className, onCropSe
   };
 
   return (
+    
     <div className={`space-y-6 ${className}`}>
       {/* Overall Profit/Loss Summary - moved to top */}
       <div className="mb-6">
