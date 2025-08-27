@@ -40,7 +40,7 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
   const [paymentStatus, setPaymentStatus] = useState<PaymentStatus>('unpaid');
   const [paidAmount, setPaidAmount] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | ''>('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | ''>('upi');
   const [paymentNotes, setPaymentNotes] = useState("");
   
   const { crops, addExpense, refreshCropData } = useCropStore();
@@ -151,7 +151,7 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
       setPaymentStatus('unpaid');
       setPaidAmount("");
       setPaymentDate("");
-      setPaymentMethod('');
+      setPaymentMethod('upi');
       setPaymentNotes("");
       onOpenChange(false);
     } catch (error) {
@@ -266,7 +266,7 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder="Enter the amount"
               min="0"
               step="0.01"
               className="h-9 sm:h-10"
@@ -324,7 +324,7 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
               type="number"
               value={paidAmount}
               onChange={(e) => setPaidAmount(e.target.value)}
-              placeholder="0.00"
+              placeholder={paymentStatus === 'paid' ? "Auto-filled with full amount" : "Enter the paid amount"}
               min="0"
               max={amount ? parseFloat(amount) : undefined}
               step="0.01"
@@ -382,7 +382,7 @@ const AddExpenseModal = ({ open, onOpenChange, cropId: propCropId }: AddExpenseM
 
           {/* Bill Images */}
           <div className="space-y-1.5">
-            <Label className="text-sm font-medium">Bill Images (Optional)</Label>
+            {/* <Label className="text-sm font-medium">Bill Images (Optional)</Label> */}
             <MultiImageUpload
               onFileSelect={handleFileSelect}
               onChange={setImageUrls}

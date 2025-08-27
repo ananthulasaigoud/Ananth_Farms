@@ -1,5 +1,7 @@
 import { createWorker } from 'tesseract.js';
 import { ExpenseCategory } from '@/types/crop';
+import { askGemini } from './gemini';
+import { useCropStore } from '@/store/supabaseCropStore';
 
 // Tesseract OCR for extracting text from images (100% free)
 export async function extractTextFromImage(imageFile: File): Promise<string> {
@@ -121,6 +123,43 @@ export function getAIResponse(userMessage: string): string {
   return "I'm your AI farm assistant! I can help with farm management advice, expense tracking, and crop planning. Ask me about profits, expenses, crops, weather, or soil management.";
 }
 
+// Build a concise context from user data for LLM
+function buildUserDataContext(crops: any[], landExpenses: any[]): string {
+  const totalCrops = crops.length;
+  const totalCropIncome = crops.reduce((sum, c) => sum + c.income.reduce((s: number, i: any) => s + i.amount, 0), 0);
+  const totalCropExpenses = crops.reduce((sum, c) => sum + c.expenses.reduce((s: number, e: any) => s + e.amount, 0), 0);
+  const totalLandExpenses = landExpenses.reduce((s, e) => s + e.amount, 0);
+  const net = totalCropIncome - (totalCropExpenses + totalLandExpenses);
+
+  const recentExpense = [...crops.flatMap(c => c.expenses), ...landExpenses]
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+
+  return [
+    `You are an assistant for a farm finance tracker. Be concise and practical.`,
+    `User data summary:`,
+    `- Crops: ${totalCrops}`,
+    `- Total crop income: ₹${totalCropIncome.toLocaleString()}`,
+    `- Total crop expenses: ₹${totalCropExpenses.toLocaleString()}`,
+    `- Land expenses: ₹${totalLandExpenses.toLocaleString()}`,
+    `- Net: ₹${net.toLocaleString()}`,
+    recentExpense ? `- Most recent expense: ${recentExpense.category || 'N/A'} ₹${recentExpense.amount} on ${recentExpense.date}` : ''
+  ].filter(Boolean).join('\n');
+}
+
+// Async Gemini-backed answer; falls back to local
+export async function getAIAnswer(userMessage: string, crops: any[], landExpenses: any[]): Promise<string> {
+  try {
+    if (!import.meta.env.VITE_GEMINI_API_KEY) {
+      return getAIResponse(userMessage);
+    }
+    const system = buildUserDataContext(crops, landExpenses);
+    const answer = await askGemini(userMessage, system);
+    return answer || getAIResponse(userMessage);
+  } catch (e) {
+    return getAIResponse(userMessage);
+  }
+}
+
 // Smart recommendations based on user data
 export function generateSmartRecommendations(crops: any[], expenses: any[]): string[] {
   const recommendations: string[] = [];
@@ -150,6 +189,58 @@ export function generateSmartRecommendations(crops: any[], expenses: any[]): str
   }
   
   return recommendations;
+}
+
+// Gemini-powered recommendations with fallback to local rules
+export async function generateRecommendations(crops: any[], expenses: any[]): Promise<string[]> {
+  try {
+    // Fallback if API key not present
+    if (!import.meta.env.VITE_GEMINI_API_KEY) {
+      return generateSmartRecommendations(crops, expenses);
+    }
+
+    const totalCrops = crops.length;
+    const totalIncome = crops.reduce((sum, c) => sum + c.income.reduce((s: number, i: any) => s + i.amount, 0), 0);
+    const totalExpenses = crops.reduce((sum, c) => sum + c.expenses.reduce((s: number, e: any) => s + e.amount, 0), 0) +
+      expenses.filter((e: any) => !e.cropId && !e.crop_id).reduce((s: number, e: any) => s + e.amount, 0);
+
+    const cropSummaries = crops.map((c: any) => ({
+      name: c.name,
+      type: c.type,
+      area: c.landArea,
+      unit: c.landUnit,
+      income: c.income.reduce((s: number, i: any) => s + i.amount, 0),
+      expenses: c.expenses.reduce((s: number, e: any) => s + e.amount, 0),
+    }));
+
+    const system = [
+      'You are an assistant generating 3-6 concise, actionable tips for a farm finance dashboard bell.',
+      'Tips should be short (<= 140 chars), practical, and based on the data provided.',
+      'Focus on profit, expense control, payment status, seasonal actions, and data hygiene.',
+    ].join('\n');
+
+    const prompt = `Data summary:\n` +
+      `- Crops: ${totalCrops}\n` +
+      `- Total income: ₹${totalIncome}\n` +
+      `- Total expenses: ₹${totalExpenses}\n` +
+      `- Per-crop summary: ${JSON.stringify(cropSummaries)}\n\n` +
+      `Return ONLY a JSON array of strings with tips. Example: ["Tip 1", "Tip 2"]`;
+
+    const raw = await askGemini(prompt, system);
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.every((x) => typeof x === 'string')) {
+        return parsed.slice(0, 6);
+      }
+    } catch (_) {
+      // Fallback: try line-based parsing
+      const lines = raw.split(/\r?\n/).map((l) => l.replace(/^[-•\d\.\s]+/, '').trim()).filter(Boolean);
+      if (lines.length > 0) return lines.slice(0, 6);
+    }
+    return generateSmartRecommendations(crops, expenses);
+  } catch {
+    return generateSmartRecommendations(crops, expenses);
+  }
 }
 
 // Predict profit based on historical data (simple algorithm)

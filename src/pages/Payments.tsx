@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { Expense, Income, LandExpense, PaymentInfo } from "@/types/crop";
 import { toast } from "sonner";
+
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -24,6 +27,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Payments = () => {
+  const navigate = useNavigate();
+  
   const { t } = useTranslation();
   const { crops, landExpenses, updatePaymentStatus, getPaymentSummary } = useCropStore();
   const { user } = useAuth();
@@ -91,31 +96,24 @@ const Payments = () => {
     <div className="container mx-auto px-4 py-6 space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
-            {t('payment.title')}
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            Manage payment status for all your expenses and income
-          </p>
+      <div className="flex items-center gap-4">
+            <Button 
+              onClick={() => navigate('/')}
+            >
+              <ArrowLeft className="w-4 h-4 " />
+              {/* Back */}
+            </Button>
         </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => window.location.reload()}
-          >
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Export
-          </Button>
-        </div>
+      <div className="mb-4">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+          {t('payment.title')}
+        </h1>
+        <p className="mt-2 text-gray-600 dark:text-gray-400">
+          Track and manage the payment status of all your expenses and income
+        </p>
+      </div>
+
+       
       </div>
 
       {/* Payment Summary */}
@@ -124,6 +122,11 @@ const Payments = () => {
         income={allIncome}
         landExpenses={landExpenses}
         onPaymentUpdate={updatePaymentStatus}
+        onOpenUpdate={(itm, tp) => {
+          setSelectedItem(itm as any);
+          setSelectedItemType(tp);
+          setShowPaymentModal(true);
+        }}
       />
 
       {/* Filters */}
@@ -135,11 +138,11 @@ const Payments = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label className="text-sm font-medium">Payment Status</Label>
               <Select value={filterStatus} onValueChange={(value) => setFilterStatus(value as any)}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -153,7 +156,7 @@ const Payments = () => {
             <div className="space-y-2">
               <Label className="text-sm font-medium">Type</Label>
               <Select value={filterType} onValueChange={(value) => setFilterType(value as any)}>
-                <SelectTrigger className="w-40">
+                <SelectTrigger className="w-full sm:w-40">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -186,11 +189,11 @@ const Payments = () => {
               {filteredItems.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
                 >
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-medium">
+                      <span className="font-medium truncate">
                         {getItemTitle(item)}
                       </span>
                       <Badge variant="outline" className="text-xs">
@@ -198,7 +201,7 @@ const Payments = () => {
                       </Badge>
                       {'cropId' in item && (
                         <Badge variant="secondary" className="text-xs">
-                          {getItemCrop(item)}
+                          {getItemCrop(item as Expense | Income)}
                         </Badge>
                       )}
                     </div>
@@ -211,11 +214,11 @@ const Payments = () => {
                       </div>
                     )}
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex w-full sm:w-auto items-center sm:justify-end gap-2 sm:gap-3 mt-1 sm:mt-0">
                     <PaymentStatusBadge 
-                      status={item.paymentStatus}
-                      amount={item.amount}
-                      paidAmount={item.paidAmount}
+                      status={(item as any).paymentStatus}
+                      amount={(item as any).amount}
+                      paidAmount={(item as any).paidAmount}
                     />
                     <Button
                       size="sm"
@@ -225,6 +228,7 @@ const Payments = () => {
                         setSelectedItemType(getItemType(item));
                         setShowPaymentModal(true);
                       }}
+                      className="w-full sm:w-auto"
                     >
                       {t('payment.update')}
                     </Button>

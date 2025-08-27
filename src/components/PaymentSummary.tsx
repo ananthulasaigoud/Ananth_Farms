@@ -11,13 +11,15 @@ interface PaymentSummaryProps {
   income: Income[];
   landExpenses: LandExpense[];
   onPaymentUpdate?: (type: 'expense' | 'income' | 'land_expense', id: string, paymentInfo: any) => Promise<void>;
+  onOpenUpdate?: (item: Expense | LandExpense, type: 'expense' | 'land_expense') => void;
 }
 
 export const PaymentSummary = ({ 
   expenses, 
   income, 
   landExpenses, 
-  onPaymentUpdate 
+  onPaymentUpdate,
+  onOpenUpdate,
 }: PaymentSummaryProps) => {
   const { t } = useTranslation();
 
@@ -60,7 +62,7 @@ export const PaymentSummary = ({
   return (
     <div className="space-y-4">
       {/* Payment Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">{t('payment.total_amount')}</CardTitle>
@@ -82,7 +84,7 @@ export const PaymentSummary = ({
           <CardContent>
             <div className="text-2xl font-bold text-green-600">₹{totalPaid.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              {((totalPaid / totalAmount) * 100).toFixed(1)}% {t('payment.paid')}
+              {totalAmount > 0 ? ((totalPaid / totalAmount) * 100).toFixed(1) : '0.0'}% {t('payment.paid')}
             </p>
           </CardContent>
         </Card>
@@ -108,7 +110,7 @@ export const PaymentSummary = ({
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
               <div className="flex items-center gap-2">
                 <Badge variant="destructive" className="text-xs">
                   ❌ {t('payment.unpaid')}
@@ -120,7 +122,7 @@ export const PaymentSummary = ({
               </span>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="text-xs">
                   ⚠️ {t('payment.partial')}
@@ -132,7 +134,7 @@ export const PaymentSummary = ({
               </span>
             </div>
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
               <div className="flex items-center gap-2">
                 <Badge variant="default" className="text-xs">
                   ✅ {t('payment.paid')}
@@ -190,10 +192,10 @@ export const PaymentSummary = ({
           <CardContent>
             <div className="space-y-3">
               {unpaidExpenses.slice(0, 5).map((expense) => (
-                <div key={expense.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div className="flex-1">
+                <div key={expense.id} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 p-3 border rounded-lg">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-medium">
+                      <span className="font-medium truncate">
                         {expense.category || expense.description || t('payment.unknown_expense')}
                       </span>
                       <Badge variant="outline" className="text-xs">
@@ -207,14 +209,15 @@ export const PaymentSummary = ({
                       className="mt-1"
                     />
                   </div>
-                  {onPaymentUpdate && (
+                  {onOpenUpdate && (
                     <Button
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        // This would open the payment modal
-                        console.log('Update payment for:', expense.id);
+                        const type = ('cropId' in expense) ? 'expense' : 'land_expense';
+                        onOpenUpdate(expense as Expense | LandExpense, type);
                       }}
+                      className="w-full sm:w-auto"
                     >
                       {t('payment.update')}
                     </Button>

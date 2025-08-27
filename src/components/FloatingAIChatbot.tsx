@@ -1,5 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCropStore } from '@/store/supabaseCropStore';
+import { getAIAnswer } from '@/utils/ai';
+import { voiceRecognition, textToSpeech } from '@/utils/voiceRecognition';
+import { toast } from 'sonner';
 
 const FAQ = [
   { q: 'How do I add a new crop?', a: 'Go to the dashboard and click the "Add Crop" button.' },
@@ -7,81 +10,63 @@ const FAQ = [
   { q: 'How do I use bill image OCR?', a: 'When adding an expense, use the "Extract from Bill Image" button to auto-fill details.' },
   { q: 'How do I see my profit?', a: 'Profit is shown on the dashboard and in each crop\'s details.' },
   { q: 'How do I install the app?', a: 'Click the install button in the top right of the dashboard.' },
-  // Add more Q&A as needed
 ];
-
-function getDynamicAnswer(input: string, crops: any[], landExpenses: any[]) {
-  const lower = input.toLowerCase();
-  if (lower.includes('total profit') || lower.includes('overall profit')) {
-    const totalCropProfit = crops.reduce((sum, crop) => {
-      const income = crop.income.reduce((total, inc) => total + inc.amount, 0);
-      const expenses = crop.expenses.reduce((total, exp) => total + exp.amount, 0);
-      return sum + (income - expenses);
-    }, 0);
-    const totalLandExpenses = landExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-    const netProfit = totalCropProfit - totalLandExpenses;
-    return `Your total profit is ₹${netProfit.toLocaleString()}.`;
-  }
-  if (lower.includes('how many crops')) {
-    return `You have ${crops.length} crops.`;
-  }
-  if (lower.includes('last expense')) {
-    const allExpenses = crops.flatMap(crop => crop.expenses);
-    const allLand = landExpenses || [];
-    const all = [...allExpenses, ...allLand].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    if (all.length === 0) return 'No expenses found.';
-    const e = all[0];
-    return `Your last expense was ₹${e.amount} for ${e.category} on ${e.date}.`;
-  }
-  if (lower.includes('last income')) {
-    const allIncome = crops.flatMap(crop => crop.income).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    if (allIncome.length === 0) return 'No income found.';
-    const i = allIncome[0];
-    return `Your last income was ₹${i.amount} from ${i.source} on ${i.date}.`;
-  }
-  if (lower.includes('highest expense')) {
-    const allExpenses = crops.flatMap(crop => crop.expenses);
-    const allLand = landExpenses || [];
-    const all = [...allExpenses, ...allLand];
-    if (all.length === 0) return 'No expenses found.';
-    const max = all.reduce((a, b) => (a.amount > b.amount ? a : b));
-    return `Your highest expense is ₹${max.amount} for ${max.category} on ${max.date}.`;
-  }
-  if (lower.includes('total income')) {
-    const totalIncome = crops.reduce((sum, crop) => sum + crop.income.reduce((t, i) => t + i.amount, 0), 0);
-    return `Your total income is ₹${totalIncome.toLocaleString()}.`;
-  }
-  if (lower.includes('total expenses')) {
-    const totalExpenses = crops.reduce((sum, crop) => sum + crop.expenses.reduce((t, e) => t + e.amount, 0), 0);
-    const totalLandExpenses = landExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-    return `Your total expenses are ₹${(totalExpenses + totalLandExpenses).toLocaleString()}.`;
-  }
-  return null;
-}
 
 export default function FloatingAIChatbot() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState('');
   const [history, setHistory] = useState<{from: 'user'|'bot', text: string}[]>([]);
+  const [isListening, setIsListening] = useState(false);
+  const [isVoiceSupported, setIsVoiceSupported] = useState(false);
   const { crops, landExpenses } = useCropStore();
 
-  const handleSend = () => {
+  useEffect(() => {
+    setIsVoiceSupported(voiceRecognition.isAvailable());
+  }, []);
+
+  const handleSend = async () => {
     if (!input.trim()) return;
-    setHistory(h => [...h, { from: 'user', text: input }]);
-    // Try dynamic answer first
-    const dynamic = getDynamicAnswer(input, crops, landExpenses);
-    if (dynamic) {
-      setTimeout(() => {
-        setHistory(h => [...h, { from: 'bot', text: dynamic }]);
-      }, 500);
-    } else {
-      // Fallback to FAQ
-      const match = FAQ.find(f => input.toLowerCase().includes(f.q.toLowerCase()));
-      setTimeout(() => {
-        setHistory(h => [...h, { from: 'bot', text: match ? match.a : 'Sorry, I don\'t know that yet. Try asking something else!' }]);
-      }, 500);
-    }
+    const text = input;
+    setHistory(h => [...h, { from: 'user', text }]);
+
+    // Attempt Gemini with full user context; fallback handled in getAIAnswer
+    const answer = await getAIAnswer(text, crops, landExpenses);
+    setHistory(h => [...h, { from: 'bot', text: answer }]);
     setInput('');
+  };
+
+  const startVoiceRecognition = async () => {
+    if (!voiceRecognition.isAvailable()) {
+      toast.error('Voice recognition not supported in this browser');
+      return;
+    }
+
+    try {
+      setIsListening(true);
+      
+      if (textToSpeech.isAvailable()) {
+        textToSpeech.speak('Listening for your question');
+      }
+
+      const result = await voiceRecognition.startListening();
+      setInput(result.transcript);
+      
+      if (textToSpeech.isAvailable()) {
+        textToSpeech.speak('Got it! Processing your question');
+      }
+      
+      toast.success('Voice input captured successfully!');
+    } catch (error) {
+      console.error('Voice recognition error:', error);
+      toast.error('Voice recognition failed. Please try again.');
+    } finally {
+      setIsListening(false);
+    }
+  };
+
+  const stopVoiceRecognition = () => {
+    voiceRecognition.stopListening();
+    setIsListening(false);
   };
 
   return (
@@ -111,12 +96,27 @@ export default function FloatingAIChatbot() {
               className="flex-1 rounded border border-gray-300 dark:border-gray-700 px-2 py-1 text-sm focus:outline-none"
               value={input}
               onChange={e => setInput(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') handleSend(); }}
-              placeholder="Type your question..."
+              onKeyDown={e => { if (e.key === 'Enter' && !isListening) handleSend(); }}
+              placeholder={isListening ? "Listening..." : "Type your question..."}
+              disabled={isListening}
             />
+            {isVoiceSupported && (
+              <button
+                className={`px-2 py-1 rounded text-sm font-semibold ${
+                  isListening 
+                    ? "bg-red-600 hover:bg-red-700 text-white animate-pulse" 
+                    : "bg-blue-600 hover:bg-blue-700 text-white"
+                }`}
+                onClick={isListening ? stopVoiceRecognition : startVoiceRecognition}
+                title={isListening ? "Stop listening" : "Start voice input"}
+              >
+                {isListening ? '🎤' : '🎙️'}
+              </button>
+            )}
             <button
-              className="bg-green-600 hover:bg-green-700 text-white rounded px-3 py-1 text-sm font-semibold"
+              className="bg-green-600 hover:bg-green-700 text-white rounded px-3 py-1 text-sm font-semibold disabled:opacity-50"
               onClick={handleSend}
+              disabled={isListening}
             >Send</button>
           </div>
         </div>

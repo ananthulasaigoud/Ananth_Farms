@@ -192,15 +192,13 @@ const Profile = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-4">
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/')}
-                className="shrink-0"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Dashboard
-              </Button>
+            <Button 
+              onClick={() => navigate('/')}
+              className="flex items-center w-full sm:w-auto mt-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg shadow-md">
+              <ArrowLeft className="w-4 h-4 " />
+               {/* Back */}
+             </Button>
+
               <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
                 <span>Dashboard</span>
                 <span>/</span>
@@ -208,25 +206,25 @@ const Profile = () => {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-2xl sm:text-3xl">👤</span>
-              <div>
-                <h1 className="text-xl sm:text-2xl font-bold text-green-800 dark:text-green-200">
-                  Profile & Settings
-                </h1>
-                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                  Manage your account and preferences
-                </p>
-              </div>
+            <User className="w-8 h-8 sm:w-10 sm:h-10 text-green-700 dark:text-green-300" />
+            <div>
+              <h1 className="text-xl sm:text-2xl font-bold text-green-800 dark:text-green-200">
+                Profile & Settings
+              </h1>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                Manage your account and preferences
+              </p>
             </div>
           </div>
+          </div>
           {/* Mobile breadcrumb */}
-          <div className="sm:hidden pb-2">
+          {/* <div className="sm:hidden pb-2">
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span>Dashboard</span>
               <span>/</span>
               <span className="text-green-600 dark:text-green-400 font-medium">Profile</span>
             </div>
-          </div>
+          </div> */}
         </div>
       </header>
 
@@ -236,193 +234,265 @@ const Profile = () => {
           {/* Left Sidebar - Stats */}
           <div className="lg:col-span-1 space-y-6">
             {/* User Info Card */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <User className="w-5 h-5" />
-                  Account Info
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <span className="text-2xl">🌾</span>
-                  </div>
-                  <h3 className="font-semibold text-green-800 dark:text-green-200">
-                    {profileData.farmName}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {profileData.displayName || user?.email}
-                  </p>
-                </div>
-                <Separator />
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Member since:</span>
-                    <span>{user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Last login:</span>
-                    <span>{user?.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleDateString() : 'N/A'}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <Card className="overflow-hidden border shadow-md rounded-2xl">
+            {/* Gradient header */}
+            <div className="bg-gradient-to-r from-emerald-500 via-green-500 to-lime-500 text-white p-4 flex items-center gap-2">
+              <User className="w-5 h-5" />
+              <span className="font-semibold text-lg">Account Info</span>
+            </div>
 
-            {/* Farm Stats */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <span className="text-lg">📊</span>
-                  Farm Stats
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div className="text-center p-2 bg-green-50 dark:bg-green-900/20 rounded">
-                    <div className="font-semibold text-green-600 dark:text-green-400">{stats.totalCrops}</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Crops</div>
+            <CardContent className="p-5 space-y-5">
+              {/* Profile Section */}
+              <div className="text-center">
+                <div className="w-20 h-20 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto shadow-inner mb-3">
+                  <span className="text-3xl">🌾</span>
+                </div>
+                <h3 className="font-bold text-xl text-emerald-700 dark:text-emerald-300">
+                  {profileData.farmName}
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {profileData.displayName || user?.email}
+                </p>
+              </div>
+
+              <Separator />
+
+              {/* Info Section */}
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between items-center border-b pb-2">
+                  <span className="text-gray-600 dark:text-gray-400">📅 Member since</span>
+                  <span className="font-medium text-gray-800 dark:text-gray-200">
+                    {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
+                  </span>
+                </div>
+
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 dark:text-gray-400">⏳ Last login</span>
+                  <span className="font-medium text-gray-800 dark:text-gray-200">
+                    {user?.last_sign_in_at ? new Date(user.last_sign_in_at).toLocaleDateString() : 'N/A'}
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+
+
+          {/* Farm Stats */}
+          <Card className="overflow-hidden border shadow-md rounded-2xl">
+            {/* Gradient header */}
+            <div className="bg-gradient-to-r from-emerald-500 via-green-0 to-lime-500 text-white p-4 flex items-center gap-2">
+              <span className="text-lg">📊</span>
+              <span className="font-semibold text-lg">Farm Stats</span>
+            </div>
+
+            <CardContent className="p-5">
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                {/* Total Crops */}
+                <div className="flex flex-col items-center p-3 rounded-xl bg-gradient-to-b from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-900/10 shadow-sm">
+                  <div className="text-lg font-bold text-green-600 dark:text-green-400">{stats.totalCrops}</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">🌾 Crops</div>
+                </div>
+
+                {/* Total Income */}
+                <div className="flex flex-col items-center p-3 rounded-xl bg-gradient-to-b from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-900/10 shadow-sm">
+                  <div className="text-lg font-bold text-blue-600 dark:text-blue-400">₹{stats.totalIncome.toLocaleString()}</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">💰 Income</div>
+                </div>
+
+                {/* Total Expenses */}
+                <div className="flex flex-col items-center p-3 rounded-xl bg-gradient-to-b from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-900/10 shadow-sm">
+                  <div className="text-lg font-bold text-red-600 dark:text-red-400">₹{stats.totalExpenses.toLocaleString()}</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">📉 Expenses</div>
+                </div>
+
+                {/* Net Profit / Loss */}
+                <div
+                  className={`flex flex-col items-center p-3 rounded-xl shadow-sm ${
+                    stats.netProfit >= 0
+                      ? 'bg-gradient-to-b from-emerald-50 to-emerald-100 dark:from-emerald-900/30 dark:to-emerald-900/10'
+                      : 'bg-gradient-to-b from-red-50 to-red-100 dark:from-red-900/30 dark:to-red-900/10'
+                  }`}
+                >
+                  <div
+                    className={`text-lg font-bold ${
+                      stats.netProfit >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
+                    }`}
+                  >
+                    ₹{Math.abs(stats.netProfit).toLocaleString()}
                   </div>
-                  <div className="text-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded">
-                    <div className="font-semibold text-blue-600 dark:text-blue-400">₹{stats.totalIncome.toLocaleString()}</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Income</div>
-                  </div>
-                  <div className="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded">
-                    <div className="font-semibold text-red-600 dark:text-red-400">₹{stats.totalExpenses.toLocaleString()}</div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Expenses</div>
-                  </div>
-                  <div className="text-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded">
-                    <div className={`font-semibold ${stats.netProfit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                      ₹{Math.abs(stats.netProfit).toLocaleString()}
-                    </div>
-                    <div className="text-xs text-gray-600 dark:text-gray-400">{stats.netProfit >= 0 ? 'Profit' : 'Loss'}</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">
+                    {stats.netProfit >= 0 ? '📈 Profit' : '📉 Loss'}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
+
           </div>
 
           {/* Right Content - Tabs */}
           <div className="lg:col-span-3">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="profile" className="flex items-center gap-2">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              {/* Tabs List */}
+              <TabsList className="grid w-full grid-cols-4 bg-gray-50 dark:bg-gray-900 rounded-xl p-1 shadow-sm">
+                <TabsTrigger
+                  value="profile"
+                  className="flex items-center justify-center gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-green-500 data-[state=active]:text-white transition-all"
+                >
                   <User className="w-4 h-4" />
                   <span className="hidden sm:inline">Profile</span>
                 </TabsTrigger>
-                <TabsTrigger value="settings" className="flex items-center gap-2">
+
+                <TabsTrigger
+                  value="settings"
+                  className="flex items-center justify-center gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-indigo-500 data-[state=active]:text-white transition-all"
+                >
                   <Settings className="w-4 h-4" />
                   <span className="hidden sm:inline">Settings</span>
                 </TabsTrigger>
-                <TabsTrigger value="security" className="flex items-center gap-2">
+
+                <TabsTrigger
+                  value="security"
+                  className="flex items-center justify-center gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-red-500 data-[state=active]:to-pink-500 data-[state=active]:text-white transition-all"
+                >
                   <Shield className="w-4 h-4" />
                   <span className="hidden sm:inline">Security</span>
                 </TabsTrigger>
-                <TabsTrigger value="data" className="flex items-center gap-2">
+
+                <TabsTrigger
+                  value="data"
+                  className="flex items-center justify-center gap-2 rounded-lg data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-violet-500 data-[state=active]:text-white transition-all"
+                >
                   <Database className="w-4 h-4" />
                   <span className="hidden sm:inline">Data</span>
                 </TabsTrigger>
               </TabsList>
+            </Tabs>
+
 
               {/* Profile Tab */}
               <TabsContent value="profile" className="space-y-6">
-                <Card>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="flex items-center gap-2">
-                        <User className="w-5 h-5" />
-                        Personal Information
-                      </CardTitle>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setIsEditing(!isEditing)}
-                      >
-                        {isEditing ? (
-                          <>
-                            <X className="w-4 h-4 mr-2" />
-                            {t('actions.cancel')}
-                          </>
-                        ) : (
-                          <>
-                            <Edit3 className="w-4 h-4 mr-2" />
-                            {t('actions.edit')}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Card className="border shadow-sm rounded-2xl overflow-hidden">
+                  {/* Gradient header */}
+                  <div className="bg-gradient-to-r from-emerald-500 via-green-500 to-lime-500 px-4 py-3 flex items-center justify-between text-white">
+                    <CardTitle className="flex items-center gap-2 text-base sm:text-lg font-semibold">
+                      <User className="w-5 h-5" />
+                      Personal Information
+                    </CardTitle>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="bg-white/20 hover:bg-white/30 text-white border-white/30"
+                      onClick={() => setIsEditing(!isEditing)}
+                    >
+                      {isEditing ? (
+                        <>
+                          <X className="w-4 h-4 mr-1" />
+                          {t("actions.cancel")}
+                        </>
+                      ) : (
+                        <>
+                          <Edit3 className="w-4 h-4 mr-1" />
+                          {t("actions.edit")}
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <CardContent className="p-5 space-y-5 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950">
+                    {/* Input Fields */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div className="space-y-2">
-                        <Label htmlFor="farmName">Farm Name</Label>
+                        <Label htmlFor="farmName">🌾 Farm Name</Label>
                         <Input
                           id="farmName"
                           value={profileData.farmName}
-                          onChange={(e) => setProfileData({ ...profileData, farmName: e.target.value })}
+                          onChange={(e) =>
+                            setProfileData({ ...profileData, farmName: e.target.value })
+                          }
                           disabled={!isEditing}
+                          className="transition focus:ring-2 focus:ring-emerald-500"
                         />
                       </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="displayName">Display Name</Label>
+                        <Label htmlFor="displayName">👤 Display Name</Label>
                         <Input
                           id="displayName"
                           value={profileData.displayName}
-                          onChange={(e) => setProfileData({ ...profileData, displayName: e.target.value })}
+                          onChange={(e) =>
+                            setProfileData({ ...profileData, displayName: e.target.value })
+                          }
                           disabled={!isEditing}
+                          className="transition focus:ring-2 focus:ring-emerald-500"
                         />
                       </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
+                        <Label htmlFor="email">📧 Email</Label>
                         <Input
                           id="email"
                           type="email"
                           value={profileData.email}
                           disabled
-                          className="bg-gray-50 dark:bg-gray-800"
+                          className="bg-gray-100 dark:bg-gray-800 cursor-not-allowed"
                         />
                       </div>
+
                       <div className="space-y-2">
-                        <Label htmlFor="phone">Phone</Label>
+                        <Label htmlFor="phone">📱 Phone</Label>
                         <Input
                           id="phone"
                           value={profileData.phone}
-                          onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
+                          onChange={(e) =>
+                            setProfileData({ ...profileData, phone: e.target.value })
+                          }
                           disabled={!isEditing}
+                          className="transition focus:ring-2 focus:ring-emerald-500"
                         />
                       </div>
+
                       <div className="space-y-2 sm:col-span-2">
-                        <Label htmlFor="location">Location</Label>
+                        <Label htmlFor="location">📍 Location</Label>
                         <Input
                           id="location"
                           value={profileData.location}
-                          onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
+                          onChange={(e) =>
+                            setProfileData({ ...profileData, location: e.target.value })
+                          }
                           disabled={!isEditing}
                           placeholder="City, State, Country"
+                          className="transition focus:ring-2 focus:ring-emerald-500"
                         />
                       </div>
                     </div>
+
+                    {/* Action Buttons */}
                     {isEditing && (
-                      <div className="flex justify-end gap-3 pt-4">
+                      <div className="flex justify-end gap-3 pt-2">
                         <Button
                           variant="outline"
                           onClick={() => setIsEditing(false)}
+                          className="hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
-                          {t('actions.cancel')}
+                          {t("actions.cancel")}
                         </Button>
                         <Button
                           onClick={handleProfileUpdate}
                           disabled={loading}
+                          className="bg-emerald-500 hover:bg-emerald-600 text-white shadow"
                         >
                           {loading ? (
                             <>
                               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                              {t('actions.saving')}
+                              {t("actions.saving")}
                             </>
                           ) : (
                             <>
                               <Save className="w-4 h-4 mr-2" />
-                              {t('actions.save_changes')}
+                              {t("actions.save_changes")}
                             </>
                           )}
                         </Button>
@@ -432,413 +502,395 @@ const Profile = () => {
                 </Card>
               </TabsContent>
 
-              {/* Settings Tab */}
-              <TabsContent value="settings" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Settings className="w-5 h-5" />
-                      App Settings
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Theme Settings */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Palette className="w-4 h-4" />
-                        Appearance
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="themeMode">Theme</Label>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Choose between light, dark, or auto mode
-                            </p>
-                          </div>
-                          <Select
-                            value={theme}
-                            onValueChange={setTheme}
-                          >
-                            <SelectTrigger className="w-32" id="themeMode">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="light">Light</SelectItem>
-                              <SelectItem value="dark">Dark</SelectItem>
-                              <SelectItem value="auto">Auto</SelectItem>
-                            </SelectContent>
-                          </Select>
+
+             {/* Settings Tab */}
+            <TabsContent value="settings" className="space-y-6">
+              {/* Main Settings Card */}
+              <Card className="border-none shadow-md">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-t-xl">
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="w-5 h-5" />
+                    App Settings
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-8 p-6 bg-blue-50 dark:bg-blue-950/30 rounded-b-xl">
+                  
+                  {/* Theme Settings */}
+                  <div className="p-4 rounded-lg bg-white/70 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-base font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Palette className="w-4 h-4 text-indigo-500" />
+                      Appearance
+                    </h3>
+                    <div className="space-y-6 mt-3">
+                      {/* Theme */}
+                      <div className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition">
+                        <div>
+                          <Label htmlFor="themeMode">Theme</Label>
+                          <p className="text-xs text-gray-600 dark:text-gray-400">
+                            Choose between light, dark, or auto mode
+                          </p>
                         </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="colorScheme">Color Scheme</Label>
-                          <Select value={colorScheme} onValueChange={setColorScheme}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="green">Green</SelectItem>
-                              <SelectItem value="blue">Blue</SelectItem>
-                              <SelectItem value="purple">Purple</SelectItem>
-                              <SelectItem value="orange">Orange</SelectItem>
-                              <SelectItem value="red">Red</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                        <Select value={theme} onValueChange={setTheme}>
+                          <SelectTrigger className="w-32" id="themeMode">
+                            <SelectValue placeholder="Select" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="light">🌞 Light</SelectItem>
+                            <SelectItem value="dark">🌙 Dark</SelectItem>
+                            <SelectItem value="auto">⚡ Auto</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Color Scheme */}
+                      <div className="p-3 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition">
+                        <Label htmlFor="colorScheme">Color Scheme</Label>
+                        <Select value={colorScheme} onValueChange={setColorScheme}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Choose color" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="green">🌿 Green</SelectItem>
+                            <SelectItem value="blue">🌊 Blue</SelectItem>
+                            <SelectItem value="purple">🌸 Purple</SelectItem>
+                            <SelectItem value="orange">🔥 Orange</SelectItem>
+                            <SelectItem value="red">❤️ Red</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
+                  </div>
 
-                    <Separator />
-
-                    {/* Language Settings */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Globe className="w-4 h-4" />
-                        Language & Region
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="language">Language</Label>
-                          <Select value={settings.language} onValueChange={(value) => setSettings({ ...settings, language: value })}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="en">English</SelectItem>
-                              <SelectItem value="hi">Hindi</SelectItem>
-                              <SelectItem value="ta">Tamil</SelectItem>
-                              <SelectItem value="te">Telugu</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="currency">Currency</Label>
-                          <Select value={settings.currency} onValueChange={(value) => setSettings({ ...settings, currency: value })}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="INR">Indian Rupee (₹)</SelectItem>
-                              <SelectItem value="USD">US Dollar ($)</SelectItem>
-                              <SelectItem value="EUR">Euro (€)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Notification Settings */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Bell className="w-4 h-4" />
-                        Notifications
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="notifications">Push Notifications</Label>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Receive notifications for important updates
-                            </p>
-                          </div>
-                          <Switch
-                            id="notifications"
-                            checked={settings.notifications}
-                            onCheckedChange={(checked) => setSettings({ ...settings, notifications: checked })}
-                          />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="autoBackup">Auto Backup</Label>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Automatically backup your data
-                            </p>
-                          </div>
-                          <Switch
-                            id="autoBackup"
-                            checked={settings.autoBackup}
-                            onCheckedChange={(checked) => setSettings({ ...settings, autoBackup: checked })}
-                          />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <Label htmlFor="dataSync">Data Sync</Label>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">
-                              Sync data across devices
-                            </p>
-                          </div>
-                          <Switch
-                            id="dataSync"
-                            checked={settings.dataSync}
-                            onCheckedChange={(checked) => setSettings({ ...settings, dataSync: checked })}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* About Section */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Info className="w-5 h-5" />
-                      About
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    <div className="text-sm text-gray-700 dark:text-gray-300">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">App Version:</span>
-                        <span>1.0.0</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">Developer:</span>
-                        <span>Ananth</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">Contact:</span>
-                        <a href="mailto:support@ananthfarms.com" className="text-blue-600 underline">support@ananthfarms.com</a>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold">Help:</span>
-                        <a href="https://github.com/ananthfarms/farmlog-profit-tracker#readme" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">User Guide</a>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Security Tab */}
-              <TabsContent value="security" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Shield className="w-5 h-5" />
-                      Security Settings
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Password Change */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Key className="w-4 h-4" />
-                        Password
-                      </h3>
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="currentPassword">Current Password</Label>
-                          <div className="relative">
-                            <Input
-                              id="currentPassword"
-                              type={showPassword ? "text" : "password"}
-                              placeholder="Enter current password"
-                            />
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                              onClick={() => setShowPassword(!showPassword)}
-                            >
-                              {showPassword ? (
-                                <EyeOff className="h-4 w-4" />
-                              ) : (
-                                <Eye className="h-4 w-4" />
-                              )}
-                            </Button>
-                          </div>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="newPassword">New Password</Label>
-                          <Input
-                            id="newPassword"
-                            type="password"
-                            placeholder="Enter new password"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="confirmPassword">Confirm New Password</Label>
-                          <Input
-                            id="confirmPassword"
-                            type="password"
-                            placeholder="Confirm new password"
-                          />
-                        </div>
-                        <Button className="w-full sm:w-auto">
-                          <Key className="w-4 h-4 mr-2" />
-                          Change Password
-                        </Button>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Account Actions */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        Account Actions
-                      </h3>
-                      <div className="space-y-3">
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="outline" className="w-full sm:w-auto text-red-600 hover:text-red-700 hover:bg-red-50">
-                              <LogOut className="w-4 h-4 mr-2" />
-                              Sign Out
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Sign Out</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                Are you sure you want to sign out? You'll need to sign in again to access your data.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction onClick={handleSignOut}>
-                                Sign Out
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="outline" className="w-full sm:w-auto text-red-600 hover:text-red-700 hover:bg-red-50">
-                              <Trash2 className="w-4 h-4 mr-2" />
-                              Delete Account
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Delete Account</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This action cannot be undone. This will permanently delete your account and all associated data.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={handleDeleteAccount}
-                                className="bg-red-600 hover:bg-red-700"
-                              >
-                                Delete Account
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Data Tab */}
-              <TabsContent value="data" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Database className="w-5 h-5" />
-                      Data Management
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    {/* Data Export */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Download className="w-4 h-4" />
-                        Export Data
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Download a backup of all your farm data including crops, expenses, and income records.
-                      </p>
-                      <Button onClick={handleDataExport} className="w-full sm:w-auto">
-                        <Download className="w-4 h-4 mr-2" />
-                        Export All Data
-                      </Button>
-                    </div>
-
-                    <Separator />
-
-                    {/* Data Import */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Upload className="w-4 h-4" />
-                        Import Data
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Import previously exported data. This will merge with your existing data.
-                      </p>
+                  {/* Language Settings */}
+                  <div className="p-4 rounded-lg bg-white/70 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-base font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Globe className="w-4 h-4 text-indigo-500" />
+                      Language & Region
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3">
                       <div className="space-y-2">
-                        <Label htmlFor="importFile">Select File</Label>
-                        <Input
-                          id="importFile"
-                          type="file"
-                          accept=".json"
-                          onChange={handleDataImport}
-                        />
+                        <Label htmlFor="language">Language</Label>
+                        <Select value={settings.language} onValueChange={(value) => setSettings({ ...settings, language: value })}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select language" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="en">🇬🇧 English</SelectItem>
+                            <SelectItem value="hi">🇮🇳 Hindi</SelectItem>
+                            <SelectItem value="ta">🇮🇳 Tamil</SelectItem>
+                            <SelectItem value="te">🇮🇳 Telugu</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="currency">Currency</Label>
+                        <Select value={settings.currency} onValueChange={(value) => setSettings({ ...settings, currency: value })}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select currency" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="INR">🇮🇳 Indian Rupee (₹)</SelectItem>
+                            <SelectItem value="USD">🇺🇸 US Dollar ($)</SelectItem>
+                            <SelectItem value="EUR">🇪🇺 Euro (€)</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
                     </div>
+                  </div>
 
-                    <Separator />
+                  {/* Notifications */}
+                  <div className="p-4 rounded-lg bg-white/70 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-base font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Bell className="w-4 h-4 text-indigo-500" />
+                      Notifications
+                    </h3>
+                    <div className="space-y-4 mt-3">
+                      {[
+                        { id: "notifications", label: "Push Notifications", desc: "Receive notifications for important updates", checked: settings.notifications },
+                        { id: "autoBackup", label: "Auto Backup", desc: "Automatically backup your data", checked: settings.autoBackup },
+                        { id: "dataSync", label: "Data Sync", desc: "Sync data across devices", checked: settings.dataSync }
+                      ].map((item) => (
+                        <div key={item.id} className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/40 transition">
+                          <div>
+                            <Label htmlFor={item.id}>{item.label}</Label>
+                            <p className="text-xs text-gray-600 dark:text-gray-400">{item.desc}</p>
+                          </div>
+                          <Switch
+                            id={item.id}
+                            checked={item.checked}
+                            onCheckedChange={(checked) => setSettings({ ...settings, [item.id]: checked })}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
 
-                    {/* Data Refresh */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <span className="text-lg">🔄</span>
-                        Data Sync
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        Manually refresh your data from the server to ensure you have the latest information.
-                      </p>
-                      <Button 
-                        onClick={refreshCropData} 
-                        variant="outline"
-                        className="w-full sm:w-auto"
-                      >
-                        <span className="text-lg mr-2">🔄</span>
-                        Refresh Data
+              {/* About Section */}
+              <Card className="border-none shadow-md">
+                <CardHeader className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-t-xl">
+                  <CardTitle className="flex items-center gap-2">
+                    <Info className="w-5 h-5" />
+                    About
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="bg-blue-50 dark:bg-blue-950/30 rounded-b-xl p-4">
+                  <div className="grid gap-3 text-sm sm:grid-cols-2">
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">App Version:</span>
+                      <span>1.0.0</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Developer:</span>
+                      <span>Ananth</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Contact:</span>
+                      <a href="mailto:support@ananthfarms.com" className="text-blue-600 underline">support@ananthfarms.com</a>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold">Help:</span>
+                      <a href="https://github.com/ananthfarms/farmlog-profit-tracker#readme" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">User Guide</a>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+
+            {/* Security Tab */}
+            <TabsContent value="security" className="space-y-6">
+              <Card className="border-none shadow-md">
+                {/* Gradient Header */}
+                <CardHeader className="bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-t-xl">
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5" />
+                    Security Settings
+                  </CardTitle>
+                </CardHeader>
+
+                {/* Card Body with tinted background */}
+                <CardContent className="space-y-8 p-6 bg-red-50 dark:bg-red-950/30 rounded-b-xl">
+
+                  {/* Password Change */}
+                  <div className="p-4 rounded-lg bg-white/70 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Key className="w-4 h-4 text-red-500" />
+                      Password
+                    </h3>
+                    <div className="space-y-4 mt-3">
+                      <div className="space-y-2">
+                        <Label htmlFor="currentPassword">Current Password</Label>
+                        <div className="relative">
+                          <Input
+                            id="currentPassword"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="Enter current password"
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                            onClick={() => setShowPassword(!showPassword)}
+                          >
+                            {showPassword ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </Button>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="newPassword">New Password</Label>
+                        <Input id="newPassword" type="password" placeholder="Enter new password" />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                        <Input id="confirmPassword" type="password" placeholder="Confirm new password" />
+                      </div>
+
+                      <Button className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white">
+                        <Key className="w-4 h-4 mr-2" />
+                        Change Password
                       </Button>
                     </div>
+                  </div>
 
-                    <Separator />
+                  {/* Account Actions */}
+                  <div className="p-4 rounded-lg bg-white/70 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <User className="w-4 h-4 text-red-500" />
+                      Account Actions
+                    </h3>
+                    <div className="space-y-3 mt-3">
+                      {/* Sign Out */}
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="outline" className="w-full sm:w-auto text-red-600 hover:text-red-700 hover:bg-red-50">
+                            <LogOut className="w-4 h-4 mr-2" />
+                            Sign Out
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Sign Out</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to sign out? You'll need to sign in again to access your data.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleSignOut}>
+                              Sign Out
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
 
-                    {/* Data Statistics */}
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Info className="w-4 h-4" />
-                        Data Statistics
-                      </h3>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded">
-                          <div className="font-semibold">{stats.totalCrops}</div>
-                          <div className="text-gray-600 dark:text-gray-400">Total Crops</div>
+                      {/* Delete Account */}
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="outline" className="w-full sm:w-auto text-red-600 hover:text-red-700 hover:bg-red-50">
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Account
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Account</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently delete your account and all associated data.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleDeleteAccount}
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Delete Account
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+
+            {/* Data Tab */}
+            <TabsContent value="data" className="space-y-6">
+              <Card className="border-none shadow-md">
+                {/* Gradient Header */}
+                <CardHeader className="bg-gradient-to-r from-purple-500 to-violet-500 text-white rounded-t-xl">
+
+                  <CardTitle className="flex items-center gap-2">
+                    <Database className="w-5 h-5" />
+                    Data Management
+                  </CardTitle>
+                </CardHeader>
+
+                {/* Body with tinted background */}
+                <CardContent className="space-y-8 p-6 bg-blue-50 dark:bg-blue-950/30 rounded-b-xl">
+                  
+                  {/* Data Export */}
+                  <div className="p-4 rounded-lg bg-white/80 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Download className="w-4 h-4 text-blue-500" />
+                      Export Data
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Download a backup of all your farm data including crops, expenses, and income records.
+                    </p>
+                    <Button
+                      onClick={handleDataExport}
+                      className="w-full sm:w-auto mt-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white"
+                    >
+                      <Download className="w-4 h-4 mr-2" />
+                      Export All Data
+                    </Button>
+
+                  </div>
+
+                  {/* Data Import */}
+                  <div className="p-4 rounded-lg bg-white/80 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Upload className="w-4 h-4 text-blue-500" />
+                      Import Data
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Import previously exported data. This will merge with your existing data.
+                    </p>
+                    <div className="space-y-2 mt-3">
+                      <Label htmlFor="importFile">Select File</Label>
+                      <Input
+                        id="importFile"
+                        type="file"
+                        accept=".json"
+                        onChange={handleDataImport}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Data Sync */}
+                  <div className="p-4 rounded-lg bg-white/80 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <span className="text-lg">🔄</span>
+                      Data Sync
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Manually refresh your data from the server to ensure you have the latest information.
+                    </p>
+                    <Button
+                      onClick={refreshCropData}
+                      variant="outline"
+                      className="w-full sm:w-auto mt-3 border-blue-600 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/40"
+                    >
+                      <span className="text-lg mr-2">🔄</span>
+                      Refresh Data
+                    </Button>
+                  </div>
+
+                  {/* Data Statistics */}
+                  <div className="p-4 rounded-lg bg-white/80 dark:bg-gray-900/40 shadow-sm">
+                    <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-200">
+                      <Info className="w-4 h-4 text-blue-500" />
+                      Data Statistics
+                    </h3>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-3 text-sm">
+                      <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-lg text-center">
+                        <div className="font-semibold text-blue-600 dark:text-blue-400">{stats.totalCrops}</div>
+                        <div className="text-gray-600 dark:text-gray-400">Total Crops</div>
+                      </div>
+                      <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-lg text-center">
+                        <div className="font-semibold text-green-600 dark:text-green-400">{landExpenses.length}</div>
+                        <div className="text-gray-600 dark:text-gray-400">Land Expenses</div>
+                      </div>
+                      <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-lg text-center">
+                        <div className="font-semibold text-red-600 dark:text-red-400">
+                          {crops.reduce((sum, crop) => sum + crop.expenses.length, 0)}
                         </div>
-                        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded">
-                          <div className="font-semibold">{landExpenses.length}</div>
-                          <div className="text-gray-600 dark:text-gray-400">Land Expenses</div>
+                        <div className="text-gray-600 dark:text-gray-400">Total Expenses</div>
+                      </div>
+                      <div className="p-3 bg-purple-100 dark:bg-purple-900/30 rounded-lg text-center">
+                        <div className="font-semibold text-purple-600 dark:text-purple-400">
+                          {crops.reduce((sum, crop) => sum + crop.income.length, 0)}
                         </div>
-                        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded">
-                          <div className="font-semibold">
-                            {crops.reduce((sum, crop) => sum + crop.expenses.length, 0)}
-                          </div>
-                          <div className="text-gray-600 dark:text-gray-400">Total Expenses</div>
-                        </div>
-                        <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded">
-                          <div className="font-semibold">
-                            {crops.reduce((sum, crop) => sum + crop.income.length, 0)}
-                          </div>
-                          <div className="text-gray-600 dark:text-gray-400">Total Income</div>
-                        </div>
+                        <div className="text-gray-600 dark:text-gray-400">Total Income</div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
             </Tabs>
           </div>
         </div>

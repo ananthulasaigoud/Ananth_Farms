@@ -11,18 +11,22 @@ import CropCard from "@/components/CropCard";
 import AddExpenseModal from "@/components/AddExpenseModal";
 import AddIncomeModal from "@/components/AddIncomeModal";
 import AddLandExpenseModal from "@/components/AddLandExpenseModal";
+
 import LandExpensesView from "@/components/LandExpensesView";
 import AuthModal from "@/components/AuthModal";
 import EditLandExpenseModal from "@/components/EditLandExpenseModal";
 import DynamicDashboardWithChart from "@/components/DynamicDashboard";
 import AdvancedCropFilter from "@/components/AdvancedCropFilter";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import AIChatDialog from "@/components/AIChatDialog";
+import RecommendationsGrid from "@/components/RecommendationsGrid";
 import { useCropStore } from "@/store/supabaseCropStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealTimeData } from "@/hooks/useRealTimeData";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Crop, LandExpense } from "@/types/crop";
-import { generateSmartRecommendations } from "@/utils/ai";
+import { generateSmartRecommendations, generateRecommendations } from "@/utils/ai";
+
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
@@ -42,6 +46,8 @@ const Index = () => {
   const [selectedLandExpense, setSelectedLandExpense] = useState<LandExpense | null>(null);
   const [filteredCrops, setFilteredCrops] = useState<Crop[]>(crops);
   const [showTipsDialog, setShowTipsDialog] = useState(false);
+  const [showAIChat, setShowAIChat] = useState(false);
+
   const cropIdForAction = useRef<string | null>(null);
 
   // PWA install state
@@ -132,6 +138,8 @@ const Index = () => {
     toast.success(t('auth.sign_out') + " " + t('messages.success').toLowerCase());
   };
 
+
+
   const getColorSchemeClasses = () => {
     const baseClasses = "min-h-screen p-2 sm:p-4";
     const colorSchemes = {
@@ -144,9 +152,16 @@ const Index = () => {
     return `${baseClasses} ${colorSchemes[colorScheme]}`;
   };
 
-  // Generate AI recommendations
+  // Generate AI recommendations (Gemini-backed with fallback)
   const allExpenses = crops.flatMap(crop => crop.expenses);
-  const recommendations = generateSmartRecommendations(crops, allExpenses);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      const tips = await generateRecommendations(crops, allExpenses);
+      setRecommendations(tips);
+    })();
+  }, [crops, allExpenses.length]);
 
   if (authLoading) {
     return (
@@ -178,6 +193,18 @@ const Index = () => {
         <div className="flex gap-2">
           {/* Language Switcher */}
           {/* <LanguageSwitcher /> */}
+
+          {/* Open AI Assistant Dialog */}
+          <Button
+            variant="default"
+            size="sm"
+            onClick={() => setShowAIChat(true)}
+            className="shrink-0 bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white border-0"
+            title="Open AI Assistant"
+          >
+            <span >🤖</span>
+            <span className="hidden sm:inline">AI</span>
+          </Button>
 
           {/* AI Tips Bell */}
           <Dialog open={showTipsDialog} onOpenChange={setShowTipsDialog}>
@@ -257,24 +284,23 @@ const Index = () => {
           </Button>
         </div>
       </header>
+
+
       {/* Dashboard Content */}
       <main className="flex-1 w-full max-w-5xl mx-auto flex flex-col gap-8">
         <DynamicDashboardWithChart onCropSelect={handleCropClick} />
         {recommendations.length > 0 && (
-          <div className="space-y-3 mb-6">
-            {recommendations.map((tip, i) => (
-              <div key={i} className="bg-yellow-50 dark:bg-yellow-950/20 border-l-4 border-yellow-400 dark:border-yellow-600 p-3 rounded text-yellow-900 dark:text-yellow-100 text-sm flex items-start gap-2">
-                <span className="mt-0.5">💡</span>
-                <span>{tip}</span>
-              </div>
-            ))}
-          </div>
+          <RecommendationsGrid tips={recommendations} className="mb-6" onNavigate={(route) => navigate(route)} />
         )}
       </main>
       {/* Modals */}
       <AddExpenseModal open={showAddExpense} onOpenChange={setShowAddExpense} cropId={cropIdForAction.current} />
       <AddIncomeModal open={showAddIncome} onOpenChange={setShowAddIncome} cropId={cropIdForAction.current} />
       <AddLandExpenseModal open={showAddLandExpense} onOpenChange={setShowAddLandExpense} />
+
+      {/* AI Assistant Dialog */}
+      <AIChatDialog open={showAIChat} onOpenChange={setShowAIChat} />
+
       {selectedLandExpense && (
         <EditLandExpenseModal
           expense={selectedLandExpense}

@@ -201,23 +201,36 @@ const CropDetail = () => {
       <header className="bg-white/80 dark:bg-green-950/80 shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between py-4 gap-4">
-            <div className="flex items-center gap-4 w-full sm:w-auto">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/')}
-                className="shrink-0"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Back to Dashboard</span>
-                <span className="sm:hidden">Back</span>
-              </Button>
-              <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500">
-                <span>Dashboard</span>
-                <span>/</span>
-                <span className="text-green-600 dark:text-green-400 font-medium">{crop.name}</span>
-              </div>
+          <div className="flex items-center justify-between w-full sm:w-auto gap-3 sm:gap-4">
+            {/* Back Button */}
+            <Button
+              onClick={() => navigate('/')}
+              className="
+                flex items-center gap-2 px-4 py-2
+                rounded-lg text-sm font-medium
+                bg-gradient-to-r from-blue-500 to-blue-600 text-white
+                shadow-md
+                transition-all duration-300
+                hover:from-blue-600 hover:to-blue-700 hover:scale-105
+                active:scale-95
+                focus:outline-none focus:ring-2 focus:ring-blue-400
+              "
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span className="hidden sm:inline">Back to Dashboard</span>
+              {/* <span className="sm:hidden">Back</span> */}
+            </Button>
+
+            {/* Breadcrumb */}
+            <div className="hidden sm:flex items-center gap-2 text-sm">
+              <span className="text-gray-500">Dashboard</span>
+              <span className="text-gray-400">/</span>
+              <span className="font-semibold text-green-600 dark:text-green-400">
+                {crop.name}
+              </span>
             </div>
+          </div>
+
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
               <div className="flex items-center gap-3">
                 <span className="text-2xl sm:text-3xl">🌾</span>
@@ -230,23 +243,43 @@ const CropDetail = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
+                {/* Edit Crop Button */}
                 <Button
-                  variant="outline"
-                  size="sm"
                   onClick={() => setShowEditCrop(true)}
+                  className="
+                    flex items-center gap-2
+                    px-4 py-2 text-sm font-medium
+                    rounded-xl
+                    bg-gradient-to-r from-blue-500 to-blue-700 text-white
+                    shadow-md
+                    transition-all duration-300
+                    hover:from-blue-600 hover:to-blue-800 hover:scale-105
+                    active:scale-95
+                    focus:outline-none focus:ring-2 focus:ring-blue-400
+                  "
                 >
-                  <Edit className="w-4 h-4 mr-2" />
+                  <Edit className="w-4 h-4" />
                   {t('actions.edit_crop')}
                 </Button>
+
+                {/* Delete Crop Button */}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
-                      variant="outline"
-                      size="sm"
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                      className="
+                        flex items-center gap-2
+                        px-4 py-2 text-sm font-medium
+                        rounded-xl
+                        bg-gradient-to-r from-red-500 to-red-700 text-white
+                        shadow-md
+                        transition-all duration-300
+                        hover:from-red-600 hover:to-red-800 hover:scale-105
+                        active:scale-95
+                        focus:outline-none focus:ring-2 focus:ring-red-400
+                      "
                     >
-                      <Trash2 className="w-4 h-4 mr-2" />
+                      <Trash2 className="w-4 h-4" />
                       {t('actions.delete_crop')}
                     </Button>
                   </AlertDialogTrigger>
@@ -261,7 +294,7 @@ const CropDetail = () => {
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={handleDeleteCrop}
-                        className="bg-red-600 hover:bg-red-700"
+                        className="bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-sm"
                       >
                         {t('actions.delete')}
                       </AlertDialogAction>
@@ -269,16 +302,12 @@ const CropDetail = () => {
                   </AlertDialogContent>
                 </AlertDialog>
               </div>
+
             </div>
           </div>
           {/* Mobile breadcrumb */}
-          <div className="sm:hidden pb-2">
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <span>Dashboard</span>
-              <span>/</span>
-              <span className="text-green-600 dark:text-green-400 font-medium">{crop.name}</span>
-            </div>
-          </div>
+          {/* <div className="sm:hidden pb-2">
+          </div> */}
         </div>
       </header>
 
@@ -386,14 +415,14 @@ const CropDetail = () => {
                   <Plus className="w-4 h-4 mr-2" />
                   {t('actions.add_expense')}
                 </Button>
-                <Button
+                {/* <Button
                   onClick={() => navigate('/add-crop')}
                   variant="outline"
                   className="w-full h-10 sm:h-11"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {t('actions.add_another_crop')}
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </div>
@@ -402,18 +431,18 @@ const CropDetail = () => {
           <div className="lg:col-span-2">
             <Tabs defaultValue="expenses" className="w-full">
               <TabsList className="grid w-full grid-cols-2 h-10 sm:h-11">
-                <TabsTrigger value="expenses" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
+                <TabsTrigger value="expenses" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm ">
                   <Receipt className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">{t('tabs.expenses')}</span>
-                  <span className="sm:hidden">{t('tabs.expenses')}</span>
+                  <span className="hidden sm:inline">{t('Expenses')}</span>
+                  <span className="sm:hidden">{t('Expenses')}</span>
                   <Badge variant="secondary" className="ml-1 text-xs">
                     {crop.expenses.length}
                   </Badge>
                 </TabsTrigger>
                 <TabsTrigger value="income" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
                   <DollarSign className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span className="hidden sm:inline">{t('tabs.income')}</span>
-                  <span className="sm:hidden">{t('tabs.income')}</span>
+                  <span className="hidden sm:inline">{t('Income')}</span>
+                  <span className="sm:hidden">{t('Income')}</span>
                   <Badge variant="secondary" className="ml-1 text-xs">
                     {crop.income.length}
                   </Badge>
@@ -423,13 +452,13 @@ const CropDetail = () => {
               <TabsContent value="expenses" className="mt-4 sm:mt-6">
                 <Card>
                   <div className="px-4 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-2">
-                    <h2 className="text-lg sm:text-xl font-semibold">{t('cards.expense_records')}</h2>
+                    <h2 className="text-lg sm:text-xl font-semibold">{t('Expense records')}</h2>
                   </div>
                   <CardContent className="pt-0">
                     {expenseItems.length === 0 ? (
                       <div className="text-center py-6 sm:py-8 text-gray-500">
                         <Receipt className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
-                        <p className="text-sm sm:text-base">{t('messages.no_expense_records')}</p>
+                        <p className="text-sm sm:text-base">{t('No expense records')}</p>
                         <Button
                           onClick={() => setShowAddExpense(true)}
                           className="mt-3 sm:mt-4 bg-red-600 hover:bg-red-700 text-white h-9 sm:h-10"
@@ -472,7 +501,7 @@ const CropDetail = () => {
                                 <Edit className="w-5 h-5" />
                               </Button>
                               <Button variant="ghost" size="icon" className="w-10 h-10 text-red-600 hover:bg-red-50" aria-label={t('actions.delete')} onClick={() => {
-                                if (window.confirm(t('messages.delete_expense_confirmation'))) {
+                                if (window.confirm(t('Delete expense confirmation'))) {
                                   handleDeleteExpense(expense.id);
                                 }
                               }}>
@@ -490,19 +519,19 @@ const CropDetail = () => {
               <TabsContent value="income" className="mt-4 sm:mt-6">
                 <Card>
                   <div className="px-4 pt-4 pb-2 sm:px-6 sm:pt-6 sm:pb-2">
-                    <h2 className="text-lg sm:text-xl font-semibold">{t('cards.income_records')}</h2>
+                    <h2 className="text-lg sm:text-xl font-semibold">{t('Income records')}</h2>
                   </div>
                   <CardContent className="pt-0">
                     {incomeItems.length === 0 ? (
                       <div className="text-center py-6 sm:py-8 text-gray-500">
                         <DollarSign className="w-8 h-8 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 text-gray-300" />
-                        <p className="text-sm sm:text-base">{t('messages.no_income_records')}</p>
+                        <p className="text-sm sm:text-base">{t('No income records')}</p>
                         <Button
                           onClick={() => setShowAddIncome(true)}
                           className="mt-3 sm:mt-4 bg-green-600 hover:bg-green-700 h-9 sm:h-10"
                         >
                           <Plus className="w-4 h-4 mr-2" />
-                          {t('actions.add_first_income')}
+                          {t('Add first income')}
                         </Button>
                       </div>
                     ) : (
@@ -530,7 +559,7 @@ const CropDetail = () => {
                                 <Edit className="w-5 h-5" />
                               </Button>
                               <Button variant="ghost" size="icon" className="w-10 h-10 text-red-600 hover:bg-red-50" aria-label={t('actions.delete')} onClick={() => {
-                                if (window.confirm(t('messages.delete_income_confirmation'))) {
+                                if (window.confirm(t('Delete income confirmation'))) {
                                   handleDeleteIncome(income.id);
                                 }
                               }}>
