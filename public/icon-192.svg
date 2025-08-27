@@ -1,0 +1,30 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="192" height="192" rx="24" fill="#22c55e"/>
+  
+  <!-- Farm/Wheat Icon -->
+  <g transform="translate(48, 32)">
+    <!-- Wheat stems -->
+    <path d="M48 128 L48 48" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+    <path d="M32 128 L32 64" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M64 128 L64 56" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    
+    <!-- Wheat grains -->
+    <ellipse cx="48" cy="48" rx="6" ry="3" fill="#fbbf24"/>
+    <ellipse cx="48" cy="56" rx="6" ry="3" fill="#fbbf24"/>
+    <ellipse cx="48" cy="64" rx="6" ry="3" fill="#fbbf24"/>
+    <ellipse cx="48" cy="72" rx="5" ry="3" fill="#fbbf24"/>
+    
+    <ellipse cx="32" cy="64" rx="5" ry="3" fill="#fbbf24"/>
+    <ellipse cx="32" cy="72" rx="5" ry="3" fill="#fbbf24"/>
+    <ellipse cx="32" cy="80" rx="4" ry="2" fill="#fbbf24"/>
+    
+    <ellipse cx="64" cy="56" rx="5" ry="3" fill="#fbbf24"/>
+    <ellipse cx="64" cy="64" rx="5" ry="3" fill="#fbbf24"/>
+    <ellipse cx="64" cy="72" rx="4" ry="2" fill="#fbbf24"/>
+  </g>
+  
+  <!-- Money/Finance Symbol -->
+  <circle cx="144" cy="144" r="16" fill="#ffffff" opacity="0.9"/>
+  <text x="144" y="152" text-anchor="middle" fill="#22c55e" font-family="Arial, sans-serif" font-size="16" font-weight="bold">₹</text>
+</svg>

@@ -13,7 +13,6 @@ import Profile from "./pages/Profile";
 import Payments from "./pages/Payments";
 import NotFound from "./pages/NotFound";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
-import FloatingAIChatbot from './components/FloatingAIChatbot';
 import PWAInstallButton from './components/PWAInstallButton';
 
 const queryClient = new QueryClient();
@@ -37,7 +36,6 @@ const App = () => (
           </Routes>
           <PWAInstallButton />
         </BrowserRouter>
-        <FloatingAIChatbot />
       </TooltipProvider>
     </ThemeProvider>
   </QueryClientProvider>
