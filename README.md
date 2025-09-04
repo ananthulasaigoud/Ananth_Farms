@@ -1,58 +1,43 @@
-# 🌾 Ananthula Profit Tracker
+# Farm Finance Tracker
 
-A comprehensive Progressive Web App (PWA) for farmers to track crops, expenses, income, and analyze profits with AI-powered insights.
+A comprehensive farm management application built with React, TypeScript, and Supabase, featuring AI-powered insights and expense tracking.
 
-## ✨ Features
+## 🌟 Features
 
-### 📊 **Core Functionality**
-- **Crop Management**: Add, edit, and track multiple crops with detailed information
-- **Expense Tracking**: Record and categorize farm expenses (seeds, labor, fertilizer, etc.)
-- **Income Tracking**: Log crop sales and other income sources
-- **Land Expenses**: Track general farm expenses not tied to specific crops
-- **Profit Analysis**: Real-time profit calculations and financial insights
+### Core Functionality
+- **Crop Management**: Track crops, expenses, and income
+- **Expense Tracking**: Categorize and monitor farm expenses
+- **Income Management**: Record and track crop income
+- **Land Expenses**: Track land-related costs
+- **Payment Tracking**: Monitor payment status and methods
+- **Bill Image OCR**: Extract text from bill images using Tesseract.js
 
-### 🤖 **AI-Powered Features**
-- **Smart Category Suggestions**: AI automatically suggests expense categories based on descriptions
-- **Intelligent Recommendations**: Personalized tips for improving farm profitability
-- **AI Chatbot**: Free farm management advice and guidance
-- **Profit Predictions**: Predict potential profits based on historical data
+### AI-Powered Features
+- **n8n Workflow Integration**: Modern floating chatbot powered by your n8n workflow (test and production webhooks)
+- **Smart Recommendations**: Local farming tips shown on dashboard
+- **Voice Recognition**: Voice input (Web Speech API)
+- **Expense Category Suggestions**: Lightweight keyword-based helper
 
-### 📱 **Progressive Web App (PWA)**
-- **Offline Support**: Works without internet connection
-- **Installable**: Add to home screen like a native app
-- **Responsive Design**: Optimized for mobile, tablet, and desktop
-- **Real-time Sync**: Automatic data synchronization
-
-### 🎨 **User Experience**
-- **Multi-language Support**: English and Tamil interface
-- **Theme Customization**: Light/dark modes with color schemes
-- **Image Upload**: Upload bill images for expense records
-- **Data Export/Import**: Backup and restore farm data
+### User Experience
+- **Progressive Web App (PWA)**: Installable app with offline support
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Dark/Light Theme**: Customizable color schemes
+- **Multi-language Support**: English, Hindi, Tamil, and Telugu
 - **Real-time Updates**: Live data synchronization
 
-## 🛠️ Technologies Used
-
-- **Frontend**: React 18, TypeScript, Vite
-- **UI Framework**: shadcn/ui components
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase (PostgreSQL, Auth, Storage)
-- **AI/OCR**: Tesseract.js for text extraction
-- **State Management**: Zustand
-- **Routing**: React Router
-- **Notifications**: Sonner toast notifications
-
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ and npm
-- Supabase account (free tier available)
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd farmlog-profit-tracker
+   git clone <repository-url>
+   cd FarmFinanceTracker
    ```
 
 2. **Install dependencies**
@@ -60,142 +45,142 @@ A comprehensive Progressive Web App (PWA) for farmers to track crops, expenses, 
    npm install
    ```
 
-3. **Set up Supabase**
-   - Create a new Supabase project
-   - Run the database migrations in `supabase/migrations/`
-   - Create a storage bucket named `farm-bills`
-   - Set up Row Level Security (RLS) policies
-
-4. **Configure environment variables**
-   Create a `.env` file:
+3. **Set up environment variables**
+   Create a `.env.local` file:
    ```env
+   # Supabase
    VITE_SUPABASE_URL=your_supabase_url
    VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+   # n8n (use PRODUCTION webhook when workflow is activated)
+   VITE_N8N_WEBHOOK_URL=https://<your-subdomain>.app.n8n.cloud/webhook/<your-prod-webhook-id>
+   VITE_ENABLE_FALLBACKS=false
    ```
 
-5. **Start development server**
+4. **Start development server**
    ```bash
    npm run dev
    ```
 
-## 📋 Database Schema
+## 🤖 AI Chatbot System (Floating UI)
 
-### Tables
-- **crops**: Crop information (name, type, land area, etc.)
-- **expenses**: Crop-specific expenses with categories
-- **income**: Crop income records
-- **land_expenses**: General farm expenses
-- **users**: User authentication and profiles
+The application includes a modern ChatGPT-style floating chatbot powered by n8n workflows.
 
-### Key Features
-- **Bill Images**: Support for multiple bill images per expense/income
-- **Real-time Sync**: Automatic data synchronization
-- **Soft Deletes**: Data preservation with deletion tracking
+### Features
+- **Floating Chat Interface**: Bottom-right launcher; full-screen on mobile, panel on desktop
+- **Stop / Regenerate**: Cancel a running reply and regenerate the last answer
+- **Copy-on-hover**: Quickly copy bot messages
+- **n8n Integration**: Sends user messages to your n8n webhook; supports streaming multi-JSON responses
+- **Voice Input**: Speech-to-text (Web Speech API)
+- **Quick Questions**: Pre-defined farming prompts
+- **Modern UI**: Beautiful, responsive chat interface
 
-## 🎯 Usage Guide
+### n8n Webhook Configuration
+- Use your PRODUCTION webhook URL when the workflow is active:
+  `https://<your-subdomain>.app.n8n.cloud/webhook/<your-prod-webhook-id>`
+- Manual tests in n8n use TEST URLs: `.../webhook-test/...` — activated workflows require `.../webhook/...`.
+- Set `VITE_N8N_WEBHOOK_URL` to the production URL if you want to test the activated flow end-to-end.
 
-### Getting Started
-1. **Sign Up/Login**: Create an account or sign in
-2. **Add Your First Crop**: Enter crop details and land area
-3. **Record Expenses**: Add expenses with categories and bill images
-4. **Log Income**: Record crop sales and other income
-5. **Analyze Profits**: View detailed profit analysis and insights
+### Webhook Payload Format
+```json
+{
+  "message": "User's question",
+  "timestamp": "2024-01-01T00:00:00.000Z",
+  "userId": "farm-user",
+  "context": {
+    "model": "default | agent"
+  }
+}
+```
 
-### Key Features
+### Expected Response Format
+```json
+{
+  "response": "AI response text",
+  "success": true
+}
+```
 
-#### 📱 **Dashboard**
-- Overview of all crops and financial summary
-- Quick actions for adding expenses/income
-- AI-powered smart recommendations
-- Install PWA prompt
+### Mounting the Floating Chatbot
+Placed once at the root of the main page:
 
-#### 🌱 **Crop Management**
-- Add new crops with detailed information
-- View individual crop details with income/expense breakdown
-- Edit crop information and delete crops
-- Track profit margins per crop
+```tsx
+// src/pages/Index.tsx
+import FloatingAIChatbot from "@/components/FloatingAIChatbot";
 
-#### 💰 **Financial Tracking**
-- **Expenses**: Categorize expenses (seeds, labor, fertilizer, etc.)
-- **Income**: Record sales and other income sources
-- **Land Expenses**: Track general farm costs
-- **Bill Images**: Upload and view expense receipts
+export default function Index() {
+  return (
+    <>
+      {/* ...page content... */}
+      <FloatingAIChatbot />
+    </>
+  );
+}
+```
 
-#### 🤖 **AI Features**
-- **Smart Suggestions**: AI suggests expense categories
-- **Recommendations**: Personalized farm management tips
-- **Chatbot**: Get free farm advice and guidance
-- **Profit Predictions**: Estimate future crop profits
+To render globally across routes, mount it in your top-level layout (e.g., `App.tsx`).
 
-#### ⚙️ **Settings & Profile**
-- **Theme Customization**: Light/dark modes with color schemes
-- **Language Settings**: English and Tamil support
-- **Data Management**: Export/import farm data
-- **Security**: Password management and account settings
+### Formatting and Streaming Handling
+- Client handles n8n streaming responses with multiple JSON objects (e.g., `{"type":"item","content":"..."}` lines) and combines all `content` parts.
+- Responses are formatted for neat bullets and cleaned dates before display.
+
+## 🏗️ Architecture
+
+### Frontend
+- **React 18** with TypeScript
+- **Vite** for fast development and building
+- **Tailwind CSS** for styling
+- **Shadcn/ui** for UI components
+- **React Router** for navigation
+
+### Backend & Database
+- **Supabase** for database and authentication
+- **PostgreSQL** for data storage
+- **Real-time subscriptions** for live updates
+
+### AI & Integrations
+- **n8n Workflows** for AI chatbot responses
+- **Web Speech API** for voice recognition
+
+
+## 🌐 Internationalization
+
+Supported languages:
+- English (en)
+
 
 ## 🔧 Development
 
-### Project Structure
+### Available Scripts
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run type-check   # Check TypeScript types
+```
+
+### Code Structure
 ```
 src/
-├── components/          # Reusable UI components
-├── pages/              # Page components
-├── store/              # State management (Zustand)
-├── hooks/              # Custom React hooks
-├── contexts/           # React contexts
-├── utils/              # Utility functions
-├── types/              # TypeScript type definitions
-└── integrations/       # External service integrations
+├── components/       # Reusable UI components
+├── pages/           # Page components
+├── hooks/           # Custom React hooks
+├── store/           # State management
+├── utils/           # Utility functions
+├── types/           # TypeScript type definitions
+└── locales/         # Internationalization files
 ```
-
-### Key Components
-- **DynamicDashboard**: Main dashboard with overview and quick actions
-- **CropCard**: Individual crop display cards
-- **AddExpenseModal**: Expense entry with AI suggestions
-- **AddIncomeModal**: Income recording interface
-- **CropDetail**: Detailed crop view with tabs
-- **PWAInstallPrompt**: Progressive Web App installation
-- **FloatingAIChatbot**: AI assistant interface
-
-### State Management
-- **useCropStore**: Centralized crop and expense data management
-- **useAuth**: Authentication and user management
-- **useRealTimeData**: Real-time data synchronization
-- **ThemeContext**: Theme and color scheme management
-- **LanguageContext**: Multi-language support
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Set environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
-
-### Netlify
-1. Connect repository to Netlify
-2. Set build command: `npm run build`
-3. Set publish directory: `dist`
-4. Configure environment variables
-
-### Manual Deployment
+### Build for Production
 ```bash
 npm run build
-# Upload dist/ folder to your hosting provider
 ```
 
-## 🔒 Security
-
-- **Row Level Security (RLS)**: Database-level security policies
-- **Authentication**: Supabase Auth with email/password
-- **Data Isolation**: Users can only access their own data
-- **Secure Storage**: Encrypted file storage for bill images
-
-## 📱 PWA Features
-
-- **Offline Support**: Works without internet connection
-- **Installable**: Add to home screen on mobile/desktop
-- **App-like Experience**: Full-screen mode and native feel
-- **Background Sync**: Automatic data synchronization
+### Deploy to Vercel/Netlify
+The built files in the `dist/` directory can be deployed to any static hosting service.
 
 ## 🤝 Contributing
 
@@ -211,17 +196,11 @@ This project is licensed under the MIT License.
 
 ## 🆘 Support
 
-- **Email**: support@ananthfarms.com
-- **Documentation**: Check the in-app help section
-- **Issues**: Report bugs via GitHub issues
-
-## 🎉 Acknowledgments
-
-- Built with modern web technologies
-- Powered by Supabase for backend services
-- Enhanced with AI features for better farm management
-- Designed for Indian farmers' specific needs
+For support and questions:
+- Check the documentation
+- Open an issue on GitHub
+- Contact the development team
 
 ---
 
-**🌾 Happy Farming with FarmLog!** 🚜
+**Farm Finance Tracker** - Making farm management smarter and more efficient! 🌾✨

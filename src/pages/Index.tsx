@@ -18,14 +18,16 @@ import EditLandExpenseModal from "@/components/EditLandExpenseModal";
 import DynamicDashboardWithChart from "@/components/DynamicDashboard";
 import AdvancedCropFilter from "@/components/AdvancedCropFilter";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import AIChatDialog from "@/components/AIChatDialog";
+// import AIChatDialog from "@/components/AIChatDialog";
+import FloatingAIChatbot from "@/components/FloatingAIChatbot";
 import RecommendationsGrid from "@/components/RecommendationsGrid";
+
 import { useCropStore } from "@/store/supabaseCropStore";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealTimeData } from "@/hooks/useRealTimeData";
 import { useTheme } from "@/contexts/ThemeContext";
 import { Crop, LandExpense } from "@/types/crop";
-import { generateSmartRecommendations, generateRecommendations } from "@/utils/ai";
+// AI recommendations removed - now using n8n workflow for chatbot
 
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -46,7 +48,7 @@ const Index = () => {
   const [selectedLandExpense, setSelectedLandExpense] = useState<LandExpense | null>(null);
   const [filteredCrops, setFilteredCrops] = useState<Crop[]>(crops);
   const [showTipsDialog, setShowTipsDialog] = useState(false);
-  const [showAIChat, setShowAIChat] = useState(false);
+  // const [showAIChat, setShowAIChat] = useState(false);
 
   const cropIdForAction = useRef<string | null>(null);
 
@@ -152,16 +154,37 @@ const Index = () => {
     return `${baseClasses} ${colorSchemes[colorScheme]}`;
   };
 
-  // Generate AI recommendations (Gemini-backed with fallback)
-  const allExpenses = crops.flatMap(crop => crop.expenses);
+  // Simple recommendations based on data
   const [recommendations, setRecommendations] = useState<string[]>([]);
 
   useEffect(() => {
-    (async () => {
-      const tips = await generateRecommendations(crops, allExpenses);
-      setRecommendations(tips);
-    })();
-  }, [crops, allExpenses.length]);
+    const tips: string[] = [];
+    
+    // Check for missing data
+    const cropsWithoutExpenses = crops.filter(crop => crop.expenses.length === 0);
+    if (cropsWithoutExpenses.length > 0) {
+      tips.push(`You have ${cropsWithoutExpenses.length} crops without recorded expenses. Add expenses to get accurate profit calculations.`);
+    }
+    
+    // Check for high expenses
+    const totalExpenses = crops.flatMap(crop => crop.expenses).reduce((sum, exp) => sum + exp.amount, 0);
+    const avgExpensePerCrop = totalExpenses / Math.max(crops.length, 1);
+    if (avgExpensePerCrop > 50000) {
+      tips.push("Your average expense per crop is high. Consider reviewing your input costs and looking for bulk purchase opportunities.");
+    }
+    
+    // Seasonal advice
+    const currentMonth = new Date().getMonth();
+    if (currentMonth >= 2 && currentMonth <= 5) {
+      tips.push("It's the main growing season. Monitor your crops regularly and record all expenses for accurate profit tracking.");
+    }
+    
+    if (tips.length === 0) {
+      tips.push("Great job tracking your farm data! Keep recording expenses and income for better insights.");
+    }
+    
+    setRecommendations(tips);
+  }, [crops]);
 
   if (authLoading) {
     return (
@@ -194,17 +217,7 @@ const Index = () => {
           {/* Language Switcher */}
           {/* <LanguageSwitcher /> */}
 
-          {/* Open AI Assistant Dialog */}
-          <Button
-            variant="default"
-            size="sm"
-            onClick={() => setShowAIChat(true)}
-            className="shrink-0 bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-700 hover:to-green-800 text-white border-0"
-            title="Open AI Assistant"
-          >
-            <span >🤖</span>
-            <span className="hidden sm:inline">AI</span>
-          </Button>
+          
 
           {/* AI Tips Bell */}
           <Dialog open={showTipsDialog} onOpenChange={setShowTipsDialog}>
@@ -292,14 +305,15 @@ const Index = () => {
         {recommendations.length > 0 && (
           <RecommendationsGrid tips={recommendations} className="mb-6" onNavigate={(route) => navigate(route)} />
         )}
+        
+        
       </main>
       {/* Modals */}
       <AddExpenseModal open={showAddExpense} onOpenChange={setShowAddExpense} cropId={cropIdForAction.current} />
       <AddIncomeModal open={showAddIncome} onOpenChange={setShowAddIncome} cropId={cropIdForAction.current} />
       <AddLandExpenseModal open={showAddLandExpense} onOpenChange={setShowAddLandExpense} />
 
-      {/* AI Assistant Dialog */}
-      <AIChatDialog open={showAIChat} onOpenChange={setShowAIChat} />
+      {/* AI Assistant Dialog removed in favor of FloatingAIChatbot */}
 
       {selectedLandExpense && (
         <EditLandExpenseModal
@@ -311,6 +325,9 @@ const Index = () => {
           }}
         />
       )}
+
+      {/* Floating AI Chatbot (renders globally) */}
+      <FloatingAIChatbot />
     </div>
   );
 };

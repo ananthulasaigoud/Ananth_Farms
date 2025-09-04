@@ -4,9 +4,6 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Bot, Send, User, Sparkles, Mic, MicOff, Loader2 } from 'lucide-react';
-import { getAIAnswer } from '@/utils/ai';
-import { useCropStore } from '@/store/supabaseCropStore';
-import { voiceRecognition, textToSpeech } from '@/utils/voiceRecognition';
 import { toast } from 'sonner';
 
 interface Message {
@@ -20,12 +17,13 @@ interface AIChatbotProps {
   className?: string;
 }
 
+import { sendToN8N, extractAIResponse } from '@/utils/n8n';
+
 const AIChatbot = ({ className }: AIChatbotProps) => {
-  const { crops, landExpenses } = useCropStore();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: "Hello! I'm your AI farm assistant. I can help you with farm management advice, expense tracking tips, and crop planning. Ask me anything about farming!",
+      text: "Hello! I'm your AI farm assistant powered by n8n. I can help you with farm management advice, expense tracking tips, and crop planning. Ask me anything about farming!",
       isUser: false,
       timestamp: new Date()
     }
@@ -51,11 +49,11 @@ const AIChatbot = ({ className }: AIChatbotProps) => {
   }, [messages]);
 
   useEffect(() => {
-    setIsVoiceSupported(voiceRecognition.isAvailable());
+    setIsVoiceSupported('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
   }, []);
 
-  const startVoiceRecognition = async () => {
-    if (!voiceRecognition.isAvailable()) {
+  const startVoiceRecognition = () => {
+    if (!isVoiceSupported) {
       toast.error('Voice recognition not supported in this browser');
       return;
     }
@@ -63,31 +61,38 @@ const AIChatbot = ({ className }: AIChatbotProps) => {
     try {
       setIsListening(true);
       
-      if (textToSpeech.isAvailable()) {
-        textToSpeech.speak('Listening for your question');
-      }
+      // @ts-ignore - WebkitSpeechRecognition is not in types
+      const recognition = new (window.webkitSpeechRecognition || window.SpeechRecognition)();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
 
-      const result = await voiceRecognition.startListening();
-      setInputValue(result.transcript);
-      
-      if (textToSpeech.isAvailable()) {
-        textToSpeech.speak('Got it! Processing your question');
-      }
-      
-      toast.success('Voice input captured successfully!');
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputValue(transcript);
+        setIsListening(false);
+        toast.success('Voice input captured!');
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        toast.error('Voice recognition failed. Please try again.');
+        setIsListening(false);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.start();
     } catch (error) {
       console.error('Voice recognition error:', error);
       toast.error('Voice recognition failed. Please try again.');
-      if (textToSpeech.isAvailable()) {
-        textToSpeech.speak('Voice recognition failed. Please try again.');
-      }
-    } finally {
       setIsListening(false);
     }
   };
 
   const stopVoiceRecognition = () => {
-    voiceRecognition.stopListening();
     setIsListening(false);
   };
 
@@ -106,7 +111,21 @@ const AIChatbot = ({ className }: AIChatbotProps) => {
     setIsLoading(true);
 
     try {
-      const aiText = await getAIAnswer(userMessage.text, crops, landExpenses);
+      // Send message to n8n webhook
+      const data = await sendToN8N({
+        message: userMessage.text,
+        timestamp: new Date().toISOString(),
+        userId: 'farm-user' // You can customize this
+      });
+      
+      console.log('Received response from n8n:', data);
+      console.log('Response type:', typeof data);
+      console.log('Response keys:', Object.keys(data));
+      
+      // Extract the response from n8n workflow
+      const aiText = extractAIResponse(data);
+      console.log('Extracted AI response:', aiText);
+      
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: aiText,
@@ -115,9 +134,10 @@ const AIChatbot = ({ className }: AIChatbotProps) => {
       };
       setMessages(prev => [...prev, botMessage]);
     } catch (e) {
+      console.error('Error calling n8n webhook:', e);
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Sorry, I couldn't reach the AI right now.",
+        text: "Sorry, I'm having trouble connecting to my knowledge base right now. Please try again in a moment.",
         isUser: false,
         timestamp: new Date()
       };

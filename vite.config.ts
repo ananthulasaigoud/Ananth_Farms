@@ -8,6 +8,15 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
+    proxy: {
+      // Dev-only proxy to bypass browser CORS for n8n
+      '/n8n': {
+        target: 'https://sai1709.app.n8n.cloud',
+        changeOrigin: true,
+        secure: true,
+        rewrite: (p: string) => p.replace(/^\/n8n/, ''),
+      },
+    },
   },
   plugins: [
     react(),
