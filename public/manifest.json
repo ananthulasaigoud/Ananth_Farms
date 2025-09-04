@@ -1,6 +1,6 @@
 {
   "name": "Farm Finance Tracker",
-  "short_name": "FarmLog",
+  "short_name": "Farm Tracker",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
